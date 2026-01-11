@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IELTS Reading Test</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+        min-height: 100vh;
+        padding: 1rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* Modal Styles */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 1rem;
+      }
+
+      .modal {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        max-width: 500px;
+        width: 100%;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .modal-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-icon.warning {
+        background: #fef2f2;
+        color: #dc2626;
+      }
+
+      .modal-icon.info {
+        background: #eff6ff;
+        color: #2563eb;
+      }
+
+      .modal-icon.success {
+        background: #f0fdf4;
+        color: #16a34a;
+      }
+
+      .modal-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #1f2937;
+      }
+
+      .modal-content {
+        color: #374151;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+      }
+
+      .modal-content ul {
+        margin: 0.5rem 0;
+        padding-left: 1.5rem;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 0.75rem;
+        justify-content: flex-end;
+      }
+
+      .modal-btn {
+        padding: 0.625rem 1.25rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .modal-btn-primary {
+        background: #4f46e5;
+        color: white;
+      }
+
+      .modal-btn-primary:hover {
+        background: #4338ca;
+      }
+
+      .modal-btn-danger {
+        background: #dc2626;
+        color: white;
+      }
+
+      .modal-btn-danger:hover {
+        background: #b91c1c;
+      }
+
+      .modal-btn-success {
+        background: #16a34a;
+        color: white;
+      }
+
+      .modal-btn-success:hover {
+        background: #15803d;
+      }
+
+      .modal-btn-secondary {
+        background: #e5e7eb;
+        color: #374151;
+      }
+
+      .modal-btn-secondary:hover {
+        background: #d1d5db;
+      }
+
+      /* Home Screen */
+      .home-screen {
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        padding: 2.5rem;
+        max-width: 900px;
+        margin: 2rem auto;
+      }
+
+      .home-header {
+        text-align: center;
+        margin-bottom: 3rem;
+      }
+
+      .home-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 1rem;
+        color: #4f46e5;
+      }
+
+      .home-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 0.5rem;
+      }
+
+      .home-subtitle {
+        color: #6b7280;
+        font-size: 1.1rem;
+      }
+
+      .passage-card {
+        border: 2px solid #e5e7eb;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: border-color 0.3s;
+      }
+
+      .passage-card:hover {
+        border-color: #a78bfa;
+      }
+
+      .passage-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+      }
+
+      .passage-info {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 150px;
+        padding: 0.875rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .btn-practice {
+        background: #22c55e;
+        color: white;
+      }
+
+      .btn-practice:hover {
+        background: #16a34a;
+      }
+
+      .btn-exam {
+        background: #ef4444;
+        color: white;
+      }
+
+      .btn-exam:hover {
+        background: #dc2626;
+      }
+
+      /* Test Screen */
+      .test-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: #4f46e5;
+        color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+      }
+
+      .test-header.exam-mode {
+        background: #dc2626;
+      }
+
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .header-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .header-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+
+      .header-mode {
+        font-size: 0.75rem;
+        opacity: 0.9;
+      }
+
+      .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .timer {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+      }
+
+      .timer-text {
+        font-family: monospace;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+
+      .btn-finish {
+        background: white;
+        color: #4f46e5;
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .btn-finish:hover {
+        background: #f3f4f6;
+      }
+
+      .exam-mode .btn-finish {
+        color: #dc2626;
+      }
+
+      /* Results */
+      .results-card {
+        background: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .results-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 1rem;
+      }
+
+      .results-score {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .score-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #4f46e5;
+      }
+
+      .score-details {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #374151;
+      }
+
+      .btn-home {
+        background: #4f46e5;
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .btn-home:hover {
+        background: #4338ca;
+      }
+
+      /* Test Content */
+      .test-content {
+        max-width: 1400px;
+        margin: 1.5rem auto;
+        display: grid;
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 1024px) {
+        .test-content {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .passage-box {
+          position: sticky;
+          top: 120px;
+          height: fit-content;
+        }
+      }
+
+      .passage-box,
+      .questions-box {
+        background: white;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+      }
+
+      .box-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #1f2937;
+        margin-bottom: 1rem;
+      }
+
+      .passage-text {
+        max-height: 600px;
+        overflow-y: auto;
+        line-height: 1.8;
+        color: #374151;
+      }
+
+      .passage-text p {
+        margin-bottom: 1rem;
+      }
+
+      /* Questions */
+      .question {
+        border-left: 4px solid #c7d2fe;
+        padding-left: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .question-header {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .question-number {
+        font-weight: bold;
+        color: #4f46e5;
+        min-width: 2rem;
+      }
+
+      .question-text {
+        color: #1f2937;
+        flex: 1;
+        margin-bottom: 0.75rem;
+      }
+
+      .question-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+      }
+
+      .question-input:focus {
+        outline: none;
+        border-color: #4f46e5;
+      }
+
+      .question-input:disabled {
+        background: #f9fafb;
+      }
+
+      .question-input.correct {
+        border-color: #22c55e;
+        background: #f0fdf4;
+      }
+
+      .question-input.incorrect {
+        border-color: #ef4444;
+        background: #fef2f2;
+      }
+
+      /* MCQ Options */
+      .mcq-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .mcq-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.75rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .mcq-option:hover {
+        border-color: #a78bfa;
+      }
+
+      .mcq-option.selected {
+        border-color: #4f46e5;
+        background: #eef2ff;
+      }
+
+      .mcq-option.correct-answer {
+        background: #f0fdf4;
+        border-color: #22c55e;
+      }
+
+      .mcq-option.wrong-answer {
+        background: #fef2f2;
+        border-color: #ef4444;
+      }
+
+      .mcq-option input[type="radio"] {
+        margin-top: 0.25rem;
+      }
+
+      /* Button Options */
+      .btn-options {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .btn-option {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-weight: 500;
+        cursor: pointer;
+        background: #e5e7eb;
+        color: #374151;
+        transition: all 0.3s;
+      }
+
+      .btn-option:hover {
+        background: #d1d5db;
+      }
+
+      .btn-option.selected {
+        background: #4f46e5;
+        color: white;
+      }
+
+      .btn-option.correct-answer {
+        box-shadow: 0 0 0 2px #22c55e;
+      }
+
+      .btn-option.wrong-answer {
+        box-shadow: 0 0 0 2px #ef4444;
+      }
+
+      .btn-option:disabled {
+        cursor: not-allowed;
+      }
+
+      /* Feedback */
+      .feedback {
+        margin-top: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .feedback.correct {
+        color: #22c55e;
+      }
+
+      .feedback.incorrect {
+        color: #ef4444;
+      }
+
+      .feedback-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .correct-answer-text {
+        font-size: 0.875rem;
+        color: #374151;
+        margin-top: 0.25rem;
+      }
+
+      /* Lockdown Warning */
+      .lockdown-warning {
+        position: fixed;
+        bottom: 1rem;
+        right: 1rem;
+        background: #dc2626;
+        color: white;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        z-index: 100;
+      }
+
+      /* Icons */
+      svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .home-screen {
+          padding: 1.5rem;
+        }
+
+        .home-title {
+          font-size: 1.75rem;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .header-content {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .header-controls {
+          justify-content: space-between;
+        }
+
+        .modal {
+          padding: 1.5rem;
+        }
+
+        .modal-title {
+          font-size: 1.25rem;
+        }
+      }
+
+      .small-input {
+        width: 80px;
+        text-align: center;
+        font-size: 1.125rem;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Modal Container -->
+    <div id="modalContainer"></div>
+
+    <!-- Home Screen -->
+    <div id="homeScreen" class="container">
+      <div class="home-screen">
+        <div class="home-header">
+          <svg
+            class="home-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+          <h1 class="home-title">IELTS Reading Test</h1>
+          <p class="home-subtitle">Select a passage and mode to begin</p>
+        </div>
+
+        <div id="passagesList"></div>
+      </div>
+    </div>
+
+    <!-- Test Screen -->
+    <div id="testScreen" class="hidden">
+      <div id="testHeader" class="test-header">
+        <div class="header-content">
+          <div class="header-info">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            <div>
+              <div class="header-title" id="headerTitle"></div>
+              <div class="header-mode" id="headerMode"></div>
+            </div>
+          </div>
+          <div class="header-controls">
+            <div class="timer">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span class="timer-text" id="timer">20:00</span>
+            </div>
+            <button id="finishBtn" class="btn-finish">Finish</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container test-content">
+        <div id="resultsCard" class="results-card hidden"></div>
+
+        <div class="passage-box">
+          <h3 class="box-title">Reading Passage</h3>
+          <div class="passage-text" id="passageText"></div>
+        </div>
+
+        <div class="questions-box">
+          <h3 class="box-title">Questions</h3>
+          <div id="questionsContainer"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="lockdownWarning" class="lockdown-warning hidden">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+        />
+      </svg>
+      <span>EXAM MODE - Screen Locked</span>
+    </div>
+
+    <script>
+      function showModal(options) {
+        const {
+          title,
+          content,
+          icon = "info",
+          buttons = [],
+          onClose,
+        } = options;
+
+        const iconColors = {
+          info: "info",
+          warning: "warning",
+          success: "success",
+        };
+
+        const iconSVGs = {
+          info: '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+          warning:
+            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>',
+          success:
+            '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>',
+        };
+
+        const overlay = document.createElement("div");
+        overlay.className = "modal-overlay";
+        overlay.innerHTML = `
+                <div class="modal">
+                    <div class="modal-header">
+                        <div class="modal-icon ${iconColors[icon]}">
+                            ${iconSVGs[icon]}
+                        </div>
+                        <h3 class="modal-title">${title}</h3>
+                    </div>
+                    <div class="modal-content">${content}</div>
+                    <div class="modal-actions"></div>
+                </div>
+            `;
+
+        const actionsDiv = overlay.querySelector(".modal-actions");
+        buttons.forEach((btn) => {
+          const button = document.createElement("button");
+          button.className = `modal-btn modal-btn-${btn.type || "secondary"}`;
+          button.textContent = btn.text;
+          button.onclick = () => {
+            document.body.removeChild(overlay);
+            if (btn.action) btn.action();
+          };
+          actionsDiv.appendChild(button);
+        });
+
+        document.body.appendChild(overlay);
+
+        overlay.onclick = (e) => {
+          if (e.target === overlay && onClose) {
+            document.body.removeChild(overlay);
+            onClose();
+          }
+        };
+      }
+
+      const passages = {
+        passage1: {
+          title: "The Seven Voyages of Admiral Zheng He",
+          text: `Admiral Zheng He, who was born around 1371 and died in 1433, was perhaps the most famous Chinese explorer of all time. Between 1405 and 1433, he was sent by the Ming dynasty emperor, Yongle, on a series of seven missions to increase trade and open diplomatic relations with other nations.
+
+In 1403, Yongle decided to begin the construction of a massive fleet of ships, including 62 'treasure ships', which were the largest vessels in the world at that time.
+
+The ships were loaded with a wide range of luxury goods, notably objects made of gold and silver, as well as tea, porcelain and fine textiles.
+
+The first three voyages, which took place between 1405 and 1411, followed trade routes that were already well-established. Zheng's most important task was to lead a delegation to the local ruler, to whom he presented letters from the Chinese emperor making it clear that China had only peaceful intentions.
+
+Zheng He's fourth voyage, between 1413 and 1415, proved to be the most important yet. Zheng visited India again, then crossed the Arabian Sea to the island of Hormuz in the Persian Gulf, where no Chinese ship had ever landed before.
+
+On the fifth and sixth voyages, between 1417 and 1422, Zheng went even further, calling at several major ports on the coast of Africa. From here Zheng brought back spices that were unfamiliar to the Chinese. When Zheng returned from his sixth voyage in 1422, he found that the emperor Yongle had suspended all further voyages. This was partly due to concerns about the cost.
+
+Zheng was sent on one last voyage in 1431, though the fleet did not venture any further than India. Historians believe that Zheng died during this trip, probably in 1433.
+
+Zheng's voyages expanded China's political influence in neighbouring regions of Asia. His travels did not bring immediate success in terms of expanding trade with Asia and beyond, but the exotic goods and the knowledge he brought back home created a greater curiosity about foreign customs. The Chinese also gained an understanding of just how prosperous several neighbouring countries were, and the extent of their wealth. This greatly increased emigration by the Chinese to Southeast Asia.`,
+          questions: [
+            {
+              id: 1,
+              type: "tfng",
+              question:
+                "The aim of Zheng's voyages was to develop new commercial and political contacts with other countries.",
+              answer: "TRUE",
+            },
+            {
+              id: 2,
+              type: "tfng",
+              question:
+                "Historians agree on the size of the treasure ships used in Zheng's voyages.",
+              answer: "FALSE",
+            },
+            {
+              id: 3,
+              type: "tfng",
+              question:
+                "The goods on Zheng's ships were of higher quality than anything produced in the countries which he visited.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 4,
+              type: "tfng",
+              question:
+                "Zheng's priority when he arrived in each country was to deliver a message from the Chinese emperor.",
+              answer: "TRUE",
+            },
+            {
+              id: 5,
+              type: "tfng",
+              question:
+                "Zheng gave his ships extra protection after an attempt was made to steal goods from them in Sri Lanka.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 6,
+              type: "tfng",
+              question:
+                "Zheng's fleet was the first one from China to reach Hormuz.",
+              answer: "TRUE",
+            },
+            {
+              id: 7,
+              type: "tfng",
+              question:
+                "Zheng had to ask for the emperor's permission to continue the voyage along the Red Sea to Jeddah.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 8,
+              type: "tfng",
+              question:
+                "Zheng generally avoided bringing animals back to China.",
+              answer: "FALSE",
+            },
+            {
+              id: 9,
+              type: "fill",
+              question:
+                "On fifth and sixth voyages, new _________ were introduced to China.",
+              answer: "SPICES",
+            },
+            {
+              id: 10,
+              type: "fill",
+              question:
+                "After 1422, Emperor Yongle cancelled trips because of their _________.",
+              answer: "COST",
+            },
+            {
+              id: 11,
+              type: "fill",
+              question: "Final voyage: Zheng didn't sail beyond _________.",
+              answer: "INDIA",
+            },
+            {
+              id: 12,
+              type: "fill",
+              question:
+                "Initial failure to increase _________ with other countries.",
+              answer: "TRADE",
+            },
+            {
+              id: 13,
+              type: "fill",
+              question: "Realisation that some nations had great _________.",
+              answer: "WEALTH",
+            },
+          ],
+        },
+        passage4: {
+          title: "Early Photographic Processes",
+          text: `The decades following photography's experimental beginnings in the 1820s and the public availability of a practical photographic process from 1839 were characterized by the introduction of a wide number of photographic processes.
+
+The daguerreotype was the first publicly available photographic process. The daguerreotype image was created on a silvered metal plate exposed to iodine fumes. The daguerreotype produced remarkably sharp pictures, but unlike competing processes, each daguerreotype was unique.
+
+The cyanotype or blueprint was invented by Sir John Herschel in 1840. As a relatively simple process to prepare and manipulate it was popular among amateurs throughout the nineteenth century.
+
+William Henry Fox Talbot's calotype process, the first practical negative-positive photographic process, was patented by him in 1841. This produced an image in reverse, known as a negative, which was then developed. This concept of photography, allowing the production of an unlimited number of prints from a single image, has formed the basis of photographic practice until recently.
+
+Frederick Scott Archer's wet collodion process became the standard photographic process for both amateurs and professionals from the mid-1850s until the early 1880s. Known as a wet process, it required significant skill to manipulate, but produced a negative of unsurpassed sharpness and a broad tonal range.
+
+The albumen print was the most widespread print medium in use between the mid-1850s and the 1890s. The albumen print was generally distinguishable by the glossy sheen. The fixed print could then be toned to create a wide variety of colours, ranging from purple-black to a rich chocolate brown.
+
+Perhaps the most successful permanent image process was the carbon process. First patented by A L Poitevin in 1855. Because the process does not employ compounds derived from silver, the resulting image is less likely to fade.`,
+          questions: [
+            {
+              id: 1,
+              type: "fill",
+              question: "Daguerreotype: images were very _________.",
+              answer: "SHARP",
+            },
+            {
+              id: 2,
+              type: "fill",
+              question: "Daguerreotype: each image was _________.",
+              answer: "UNIQUE",
+            },
+            {
+              id: 3,
+              type: "fill",
+              question: "Cyanotype: was comparatively _________ to use.",
+              answer: "SIMPLE",
+            },
+            {
+              id: 4,
+              type: "fill",
+              question:
+                "Calotype: first process which created an image called _________, from which unlimited copies could be made.",
+              answer: "NEGATIVE",
+            },
+            {
+              id: 5,
+              type: "fill",
+              question: "Wet collodion: needed considerable _________ to use.",
+              answer: "SKILL",
+            },
+            {
+              id: 6,
+              type: "fill",
+              question:
+                "Albumen print: produced glossy images in a range of _________.",
+              answer: "COLOURS",
+            },
+            {
+              id: 7,
+              type: "fill",
+              question:
+                "Carbon process: produced permanent images because it did not use any products based on _________.",
+              answer: "SILVER",
+            },
+            {
+              id: 8,
+              type: "tfng",
+              question:
+                "The cyanotype has proved helpful in professional fields outside that of photography.",
+              answer: "TRUE",
+            },
+            {
+              id: 9,
+              type: "tfng",
+              question:
+                "The calotype process was modified and improved upon a number of times in the years following its invention.",
+              answer: "TRUE",
+            },
+            {
+              id: 10,
+              type: "tfng",
+              question:
+                "The wet collodion process took many years to achieve success.",
+              answer: "FALSE",
+            },
+            {
+              id: 11,
+              type: "tfng",
+              question:
+                "From the mid 1850s to the 1890s, more photographers used the albumen print process than any other print medium.",
+              answer: "TRUE",
+            },
+            {
+              id: 12,
+              type: "tfng",
+              question:
+                "The inventor of the carbon process solved a long-standing problem by taking advantage of a particular feature of gelatin.",
+              answer: "TRUE",
+            },
+            {
+              id: 13,
+              type: "tfng",
+              question:
+                "The carbon process greatly increased the sales of illustrated books during the 1870s and 1890s.",
+              answer: "NOT GIVEN",
+            },
+          ],
+        },
+        passage5: {
+          title: "The History of Ice Cream",
+          text: `Ice cold desserts, called 'ices', were around as far back as the 5th century BC, when the ancient Greeks refreshed themselves with snow, flavoured with honey or fruits.
+
+Ice houses were in regular use in ancient Rome. Usually constructed of stone, underground and insulated with straw, these were sufficiently cold to preserve ice cut from frozen lakes and rivers in winter.
+
+During the Tang Dynasty (AD 616–907), the Chinese made a cold, creamy concoction of buffalo milk, flour, camphor and snow. The solution to freezing milk was salt. When salt is added to snow or ice, energy is absorbed from a container of milk.
+
+For many years, historians assumed that it was the aristocracy that were the main consumers of these early ice creams. But in 18th-century Naples in Italy, people much lower down the social scale could make, sell and enjoy ice cream. There were vendors who sold it along the public roads.
+
+In 1843, an American called Nancy Johnson designed a hand-turned freezer, which allowed her to make silky smooth ice cream. Before this, ice cream had an unpleasant texture.
+
+In 1926 another American, Clarence Vogt, improved on Johnson's idea with his continuous freezer, which made it possible to produce ice cream on an industrial scale. This pushed the price down, making ice cream available to everyone everywhere.`,
+          questions: [
+            {
+              id: 1,
+              type: "tfng",
+              question:
+                "The majority of ancient Greeks followed the advice of Hippocrates about cold foods.",
+              answer: "FALSE",
+            },
+            {
+              id: 2,
+              type: "tfng",
+              question:
+                "Seneca had different reactions to Nero's various uses of snow.",
+              answer: "TRUE",
+            },
+            {
+              id: 3,
+              type: "tfng",
+              question:
+                "Many ancient Romans went to the mountains in the summer to eat ice cream.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 4,
+              type: "tfng",
+              question:
+                "The cold storage houses in Rome were generally built of frozen blocks of ice.",
+              answer: "FALSE",
+            },
+            {
+              id: 5,
+              type: "tfng",
+              question:
+                "The buying and selling of snow and ice became a common international activity during Roman times.",
+              answer: "TRUE",
+            },
+            {
+              id: 6,
+              type: "tfng",
+              question:
+                "Tang Dynasty Chinese preferred chilled desserts made from milk to those made only of snow and ice.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 7,
+              type: "tfng",
+              question:
+                "The freezing temperature of most types of milk made it easy to create frozen dairy desserts.",
+              answer: "FALSE",
+            },
+            {
+              id: 8,
+              type: "tfng",
+              question:
+                "Salt was commonly used as a flavouring in ice creams in the past.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 9,
+              type: "fill",
+              question:
+                "It was once widely thought that ice cream was mostly eaten by the _________.",
+              answer: "ARISTOCRACY",
+            },
+            {
+              id: 10,
+              type: "fill",
+              question:
+                "Ice cream desserts were served at an important _________ for an American president.",
+              answer: "BALL",
+            },
+            {
+              id: 11,
+              type: "fill",
+              question:
+                "_________ of ice cream could be seen on the streets (Naples).",
+              answer: "VENDORS",
+            },
+            {
+              id: 12,
+              type: "fill",
+              question: "Before 1843, ice cream had an unpleasant _________.",
+              answer: "TEXTURE",
+            },
+            {
+              id: 13,
+              type: "fill",
+              question:
+                "20th-century production methods allowed a reduction in the _________ of commercially sold ice cream.",
+              answer: "PRICE",
+            },
+          ],
+        },
+        ice_cream: {
+          title: "The History of Ice Cream",
+          text: `People the world over love ice cream. But they seldom consider how the frozen dessert came into being. Ice cold desserts, called ‘ices’, were around as far back as the 5th century BC, when the ancient Greeks refreshed themselves with snow, flavoured with honey or fruits. Although the Greek physician Hippocrates warned his patients to avoid unhealthy chilled drinks, these icy treats nonetheless enjoyed tremendous popularity. The ancient Romans were also familiar with ices. While the philosopher Seneca criticised the emperor Nero in the 1st century AD for the extravagance of having ice and snow brought from the mountains to cool his swimming pool, he seemed to have seen nothing wrong with the emperor’s fondness for chilled drinks and snow flavoured with honey.
+
+But at that time, unless Romans wanted to eat their ices only in winter or high in the mountains, they needed not only to bring snow or ice to where they consumed it, but also to find some way of storing it in warm weather. This required a special sort of building now known as an ice house. Usually constructed of stone, underground and insulated with straw, these were sufficiently cold to preserve ice cut from frozen lakes and rivers in winter, or snow carried down from the mountains. Ice houses were in regular use in ancient Rome, and their growing use soon led to the development of a busy trade in snow and ice crisscrossing Europe, the Mediterranean and parts of western Asia.
+
+Yet desserts made with cold dairy products were not invented until much later. During the Tang Dynasty (AD 616–907), the Chinese made a cold, creamy concoction of buffalo milk, flour, camphor and snow. But while it was easy enough to cool milk down, this mixture proved difficult to freeze. This was simply a matter of physics. Most milk freezes at between -0.535 degrees C and -0.565 degrees C, which is below the freezing point of water; so packing it in frozen water or snow doesn’t get milk cold enough to become solid. Surprisingly, the solution to this problem was salt. When salt is added to snow or ice, energy is absorbed from a container of milk, for example, set within the snow or ice, reducing the milk’s temperature and creating a basic form of refrigeration or freezing.
+
+No one knows precisely when a mixture of salt and snow or ice was first used to produce ice cream. The earliest recorded references to what we know as ice cream occurred in Europe around 1530. However, it was not until the publication of a cookbook by Mrs Mary Eales in 1718 that recipes showing how to make it appeared in English. At that time, there was considerable variation in the ingredients. Milk, cream and custard were used almost interchangeably; and books of the period recommended including, for example, rose petals, caramel, ginger, lemon, chocolate, parsley and even asparagus.
+
+For many years, historians assumed that it was the aristocracy that were the main consumers of these early ice creams. During the 18th century, for example, a range of beautiful ice cream dishes were created for French King Louis XV and his court. In 1813, US President James Madison’s wife arranged for ice creams to be given to guests at her husband’s inaugural ball; two years later, the French writer Balzac described the lavish ice cream desserts consumed in the great houses of Paris in his novel Splendeurs et misères des courtisanes. But, especially in 18th-century Naples in Italy, in part because of the relatively easy access to snow, it was also possible for people much lower down the social scale to make, sell and enjoy ice cream. Not only were there shops and cafés selling ice creams, but there were also vendors who sold it along the public roads, and there is evidence to suggest that some families may have made it at home.
+
+However, early ice creams were still quite different from the iced treats we enjoy today. Since the milk, cream or custard was not stirred as it was frozen, it formed icy chunks, resulting in a lumpy, disagreeable texture. In 1843, however, an American called Nancy Johnson designed a hand-turned freezer, which allowed her to make silky smooth ice cream. Her invention consisted of a large container filled with ice and salt, a tightly closed cylinder for the milk or cream and a removable handle, which was rotated to stir the ice cream until properly frozen.
+
+Even with Nancy Johnson’s freezer, however, it was only possible to make small batches of ice cream at a time. But in 1926 another American, Clarence Vogt, improved on Johnson’s idea with his continuous freezer, which made it possible to produce ice cream on an industrial scale. The inventions of Johnson and Vogt resulted in an explosion in the output of ice cream, which pushed the price down, making ice cream available to everyone everywhere. As more companies started manufacturing their own brands, increased competition led to the standardisation of the commercial product and to more inventive varieties.`,
+          questions: [
+            {
+              id: 1,
+              type: "tfng",
+              question:
+                "The majority of ancient Greeks followed the advice of Hippocrates about cold foods.",
+              answer: "FALSE",
+            },
+            {
+              id: 2,
+              type: "tfng",
+              question:
+                "Seneca had different reactions to Nero’s various uses of snow.",
+              answer: "TRUE",
+            },
+            {
+              id: 3,
+              type: "tfng",
+              question:
+                "Many ancient Romans went to the mountains in the summer to eat ice cream.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 4,
+              type: "tfng",
+              question:
+                "The cold storage houses in Rome were generally built of frozen blocks of ice.",
+              answer: "FALSE",
+            },
+            {
+              id: 5,
+              type: "tfng",
+              question:
+                "The buying and selling of snow and ice became a common international activity during Roman times.",
+              answer: "TRUE",
+            },
+            {
+              id: 6,
+              type: "tfng",
+              question:
+                "Tang Dynasty Chinese preferred chilled desserts made from milk to those made only of snow and ice.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 7,
+              type: "tfng",
+              question:
+                "The freezing temperature of most types of milk made it easy to create frozen dairy desserts.",
+              answer: "FALSE",
+            },
+            {
+              id: 8,
+              type: "tfng",
+              question:
+                "Salt was commonly used as a flavouring in ice creams in the past.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 9,
+              type: "fill",
+              question:
+                "It was once widely thought that ice cream was mostly eaten by the __________.",
+              answer: "ARISTOCRACY",
+            },
+            {
+              id: 10,
+              type: "fill",
+              question:
+                "Ice cream desserts were served at an important __________ for an American president.",
+              answer: "BALL",
+            },
+            {
+              id: 11,
+              type: "fill",
+              question: "__________ of ice cream could be seen on the streets.",
+              answer: "VENDORS",
+            },
+            {
+              id: 12,
+              type: "fill",
+              question:
+                "Before 1843, ice cream was not stirred while being frozen so it had an unpleasant __________.",
+              answer: "TEXTURE",
+            },
+            {
+              id: 13,
+              type: "fill",
+              question:
+                "20th-century production methods allowed a reduction in the __________ of commercially sold ice cream.",
+              answer: "PRICE",
+            },
+          ],
+        },
+        media_literacy: {
+          title:
+            "The media literacy of children: a review of research literature",
+          text: `This document provides a review of the academic literature relating to children's media literacy. It focuses primarily on television, radio, the internet and mobile telephony, and specifically addresses the various barriers to, and enablers of media literacy in the UK. The document begins by exploring the development of the three dimensions contained in Ofcom's definition of media literacy: 'the ability to access, understand and create communications in a variety of contexts'.
+
+In terms of access, the literature suggests that most children, even at quite a young age, already possess the competencies needed to gain access to media content: they are quite skilled at using the available technologies and are also able to use the associated software. As they become older, they become more aware of regulatory mechanisms, and take these into account in seeking to make their own decisions. The large majority of children show some awareness of risks relating to giving personal information, such as contact details, on the internet, although they are less aware of financial dangers such as those relating to credit card use or communication of banking details.
+
+In terms of understanding, most of the research literature relates to the development of children's understanding of television, rather than of other media such as the internet. This literature suggests that children’s awareness of areas such as the difference between representation and reality, and the persuasive role of advertising, develops both as a function of their increasing knowledge of the world, and as a result of their broader cognitive development. Children also learn to cope with potentially unwanted or upsetting emotional responses, and to form critical judgments about areas such as television violence, by employing forms of media literacy.
+
+By contrast, when it comes to creativity, there has been less academic research relating to the ‘older’ media such as video and analogue radio than to the new media. Research here suggests that there is considerable potential for media to be used as a means of self-expression, not least by socially disadvantaged groups; that creative involvement in media production (particularly in the context of education) can make an important contribution to the development of critical understanding; and that new media such as online gaming and mobile telephony provide possibilities for new forms of interaction.
+
+Among the barriers to media literacy are several inter-related factors, of which social class and economic status are the most well-established. In the UK, these barriers limit children's access to the internet, although not to established media such as radio or television. Less is known about other potential barriers such as disability, or about the role of individual dispositions or motivations. It is important to recognise that such barriers may affect the quality of media use as well as the quantity – for example, in terms of the available functionality of the technology, the location or level of support for use.
+
+Potential enablers of media literacy include parents, teachers and other agencies such as broadcasters. Research suggests that parental mediation can play an important role in developing younger children's media literacy, for example in understanding the relationships between representation and reality. However, the role of parents depends upon broader beliefs about child-rearing, and many parents do not play as great a role as they like to suggest. Meanwhile, education about the media has a long history, at least in secondary schools in the UK, although it remains a marginal aspect of the compulsory curriculum, and is rarely found in primary schools.
+
+There is also a growing body of evidence concerning the effectiveness of particular teaching strategies in developing media literacy.
+
+The review provides an indication of several important gaps in the literature. These include specific media, such as radio, mobile phones and online gaming, and particular population groups, such as younger children, those with disabilities, and ethnic minority groups. There is a particular need for research about children’s ability to evaluate internet content, and about their awareness of new commercial strategies in the media. Of the three areas in Ofcom’s definition, ‘creativity’ is by far the least well-researched. New technologies and media forms will also pose new challenges and demands in terms of media literacy, so it is important that research in this field is regularly updated.
+
+In terms of methodology, the review finds that a great deal of research in the field is based on self-reporting, and recommends that there should be more observational studies that explore how media literacy is used in everyday life. In relation to education, there is a need to develop new approaches to assessing the effectiveness of media education in influencing media use outside the classroom.
+
+Finally, the review reminds us that media literacy is multi-dimensional. The nature and extent of the media literacy that individuals develop depends very much on the purposes for which they use the media in the first place. Different social groups may also develop and require different forms of media literacy in line with their motivations and preferences in media use. As such, we need to beware of adopting an over-simplistic approach to assessing levels of media literacy among the population at large.`,
+          questions: [
+            {
+              id: 1,
+              type: "fill",
+              question: "a. having 1 __________ to communications",
+              answer: "ACCESS",
+            },
+            {
+              id: 2,
+              type: "fill",
+              question:
+                "many children do not recognise the 2 __________ risks related to internet use",
+              answer: "FINANCIAL",
+            },
+            {
+              id: 3,
+              type: "fill",
+              question:
+                "Most research has been done on children and 3 __________, and not on alternative forms of communication.",
+              answer: "TELEVISION",
+            },
+            {
+              id: 4,
+              type: "fill",
+              question:
+                "children’s awareness grows with their knowledge of the world and their 4 __________",
+              answer: "COGNITIVE DEVELOPMENT",
+            },
+            {
+              id: 5,
+              type: "fill",
+              question:
+                "children can use media literacy to make 5 __________ and to cope with negative responses",
+              answer: "CRITICAL JUDGMENTS",
+            },
+            {
+              id: 6,
+              type: "fill",
+              question:
+                "Most research has focused on the 6 __________, indicating their use for:",
+              answer: "NEW MEDIA",
+            },
+            {
+              id: 7,
+              type: "fill",
+              question: "different types of 7 __________",
+              answer: "INTERACTION",
+            },
+            {
+              id: 8,
+              type: "tfng",
+              question:
+                "When studying barriers to media literacy, considerable research has been done on the effects of disability.",
+              answer: "FALSE",
+            },
+            {
+              id: 9,
+              type: "tfng",
+              question:
+                "The amount of support given by parents may affect the quality of a child's media use.",
+              answer: "TRUE",
+            },
+            {
+              id: 10,
+              type: "tfng",
+              question:
+                "Young children may be badly affected by use of specific media such as mobile phones.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 11,
+              type: "tfng",
+              question:
+                "More research literature is available on understanding the media than on creativity.",
+              answer: "TRUE",
+            },
+            {
+              id: 12,
+              type: "tfng",
+              question:
+                "Too many observational studies have been conducted recently into media literacy.",
+              answer: "FALSE",
+            },
+            {
+              id: 13,
+              type: "tfng",
+              question:
+                "The reason a person has for using the media will affect his or her media literacy.",
+              answer: "TRUE",
+            },
+          ],
+        },
+        radiocarbon: {
+          title:
+            "Radiocarbon dating - A profile of the scientist Nancy Athfield",
+          text: `Nancy Athfield is a scientist specializing in radiocarbon dating (a scientific method that can accurately determine the age of organic materials). She has just returned from a research expedition deep in the forests of Cambodia’s Cardamom Mountains, where she has been working to unravel the secrets of ancient human remains discovered on a number of cliff-side ledges. The unexplained remains, discovered by local people in large ceramic jars and hollowed-out logs, have increasingly drawn Athfield away from her regular employment at G.N.S. Science's Rafter Laboratory in New Zealand and into the world of research in the field.
+
+She first learned of the Cardamom remains in 2003, when a film-making company requested that she radiocarbon date bone samples for a documentary film being made in Cambodia. The film-makers had set out to investigate the idea that these human remains marked the final resting place of people belonging to the last royal household of Angkor, which once ruled much of the surrounding area. At its height in the thirteenth century, Angkor was home to a population 30 times larger than that of Paris at the time, but in 1431 it was over-run by an invading army and the city was permanently abandoned. However, many stories were told of surviving members of the royal family fleeing to seek refuge in the Cardamom Mountains.
+
+Athfield dated the original Cardamom bone samples to as late as 1620, dashing the possibility of Angkorian royalty. However, over the years since then, other ancient human remains have emerged at different sites around the country, leaving the ultimate fate of the royal household of Angkor still uncertain. Athfield intends to return soon to Cambodia in order to continue her research at a number of these new sites.
+
+Investigating the origins of an unknown people in Asia is a long way from her birthplace in New York, but Athfield’s career path has been far from conventional. She finished her secondary education early, aged just sixteen, and did a variety of badly paid jobs and community courses before a friend suggested she sit the entrance exam for university. She did, and to her surprise she was accepted. While completing her undergraduate studies in physical geography she got a job at the Lamont-Doherty Earth Observatory. It was here that she met Wally Brocker, a climate scientist and one of the pioneers of radiocarbon dating. ‘From him I learned that the best place to be is where everything you know is shaken by a new piece of information. In other words, I learned to think like a scientist.’
+
+When Athfield’s then husband was offered a post at G.N.S. Science, she accompanied him to New Zealand and took a job as lab manager at Rafter Laboratory. ‘I realised it was a good time to get a PhD,’ she says. At the time there was a great deal of controversy over radiocarbon dating, which seemed to suggest that a rat species had arrived in New Zealand as early as 100 AD, nearly 700 years before the first visitors were thought to have reached those untouched islands. Her PhD was based on five years of research exploring this issue, because she wanted to look at how scientists ascertain the reliability of radiocarbon dating and this seemed to be the perfect subject. Athfield concluded that previous radiocarbon tests had been unreliable, and this was connected to the rat’s diet, not due to faulty lab procedures as had once been thought.
+
+She then began embracing broader issues related to her skills, and started working as a fully qualified archaeologist in the UK in order to contribute to a 10-year research project fine-tuning Anglo-Saxon chronology. But it was the call from those film-makers in 2003 that truly ignited her passion for fieldwork, and the unanswered questions regarding the Cardamom remains.
+
+Athfield was keen to continue her work in Cambodia after the camera crews left, but she and her colleagues were hampered by that universal problem for researchers, a lack of funding. However, after several years of fruitless applications, she made a breakthrough when the Australian Research Council supported her and a team based at the University of Sydney so that she could return to the Cardamoms, as part of a larger project to create a Cambodia-wide radiocarbon database. The project has brought together geologists, biologists, ceramic specialists, ethnographers, and even a dendroclimatologist (who determines past climates from trees), but it has been no easy task because the country doesn’t have an extensive geological map. Nonetheless, with Cambodia’s Ministry of Culture having learned of freshly discovered jar burial sites in the Cardamom Mountains, Athfield is more enthusiastic about the project than ever.`,
+          questions: [
+            {
+              id: 1,
+              type: "tfng",
+              question:
+                "Nancy Athfield found ancient human remains in Cambodia.",
+              answer: "FALSE",
+            },
+            {
+              id: 2,
+              type: "tfng",
+              question:
+                "The human remains found in the Cardamom mountains were in good condition.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 3,
+              type: "tfng",
+              question:
+                "Athfield has taken time off from her usual job to do research in Cambodia.",
+              answer: "TRUE",
+            },
+            {
+              id: 4,
+              type: "tfng",
+              question:
+                "The Cambodian government asked Athfield to radiocarbon date the Cardamom remains.",
+              answer: "FALSE",
+            },
+            {
+              id: 5,
+              type: "tfng",
+              question:
+                "Film-makers were researching how Angkor was rebuilt after the 1431 invasion.",
+              answer: "FALSE",
+            },
+            {
+              id: 6,
+              type: "tfng",
+              question:
+                "Athfield initially doubted the stories of the royal family hiding in the Cardamom mountains.",
+              answer: "NOT GIVEN",
+            },
+            {
+              id: 7,
+              type: "tfng",
+              question:
+                "Athfield’s research disproved the idea that the Cardamom remains were from the royal family.",
+              answer: "TRUE",
+            },
+            {
+              id: 8,
+              type: "fill",
+              question:
+                "In her mid-teens, Athfield did not expect to attend __________. ",
+              answer: "UNIVERSITY",
+            },
+            {
+              id: 9,
+              type: "fill",
+              question:
+                "Athfield’s PhD investigated when a type of __________ arrived in New Zealand.",
+              answer: "RAT",
+            },
+            {
+              id: 10,
+              type: "fill",
+              question:
+                "She worked as a professional __________ before going to Cambodia in 2003.",
+              answer: "ARCHAEOLOGIST",
+            },
+            {
+              id: 11,
+              type: "fill",
+              question:
+                "Inadequate __________ prevented further research in Cambodia.",
+              answer: "FUNDING",
+            },
+            {
+              id: 12,
+              type: "fill",
+              question:
+                "Later, she helped to compile a __________ dating across Cambodia of radiocarbon.",
+              answer: "DATABASE",
+            },
+            {
+              id: 13,
+              type: "fill",
+              question:
+                "The lack of a detailed __________ of Cambodia’s geology has made her team’s research harder.",
+              answer: "GEOLOGICAL MAP",
+            },
+          ],
+        },
+        photographic: {
+          title: "Early Photographic Processes",
+          text: `The decades following photography’s experimental beginnings in the 1820s and the public availability of a practical photographic process from 1839 were characterized by the introduction of a wide number of photographic processes. The following are a few of the most significant.
+
+Announced in Paris in 1839, the daguerreotype was the first publicly available photographic process. The daguerreotype image was created on a silvered metal plate exposed to iodine fumes, forming a light-sensitive surface of silver iodide. Development was achieved by exposing the plate to fumes of heated mercury and then fixing the image in a salt solution. The daguerreotype produced remarkably sharp pictures, but unlike competing processes, each daguerreotype was unique. This proved to be its major drawback, compared to other processes from which unlimited copies could be made.
+
+One of the oldest and longest surviving photographic processes, the cyanotype or blue-print, was invented by Sir John Herschel in 1840, using a mixture of ferric ammonium citrate and potassium ferricyanide to produce a light sensitive paper. As a relatively simple process to prepare and manipulate – it required no development or fixing other than washing – it was popular among amateurs throughout the nineteenth century and has also been widely used by engineers and architects for reproducing technical drawings (blueprints).
+
+William Henry Fox Talbot’s calotype process, the first practical negative-positive photographic process, was patented by him in 1841. A sheet of good quality paper was first treated with light-sensitive silver compounds before exposure in the camera. This produced an image in reverse, known as a negative, which was then developed in gallo-nitrate of silver and fixed. This concept of photography, allowing the production of an unlimited number of prints from a single image, has formed the basis of photographic practice until recently, when it started being challenged by digital imagery. The calotype negative was the subject of many refinements in the 1840s and 50s, and it was common practice for photographers to apply heated wax in order to increase printing transparency and lessen the visibility of the paper fibres.
+
+Frederick Scott Archer’s wet collodion process, announced in 1851, became the standard photographic process for both amateurs and professionals from the mid-1850s until the early 1880s. The process proved immediately popular, and within a decade had superseded both the daguerreotype and the calotype processes. To prepare the negative for exposure, a sheet of glass was coated with a solution of iodised collodion (a syrupy liquid composed of soluble gun-cotton, ether and alcohol) and then made light-sensitive by immersion in a bath of silver nitrate. Known as a wet process because the glass negative required sensitising, exposing and processing while the chemicals were still damp, it required significant skill to manipulate, but produced a negative of unsurpassed sharpness and a broad tonal range.
+
+The albumen print, announced by the French photographer and publisher Louis-Désiré Blanquart-Évrard in 1850, was the most widespread print medium in use between the mid-1850s and the 1890s. While the printing process was chemically similar to an earlier process which was called the ‘salted paper process’, the albumen print was generally distinguishable by the glossy sheen imparted by a preliminary sizing of the paper with albumen (egg white) and salt. After the albumen coating had been applied, the paper was made light sensitive by the addition of silver nitrate, and printed in contact with the negative. The fixed print could then be toned to create a wide variety of colours, ranging from purple-black to a rich chocolate brown. Although it continued to be used well into the twentieth century, its popularity declined after the mid-1890s, in favour of a variety of manufactured papers.
+
+The fact that all silver-based photographic images tended to fade was a source of concern from the earliest days of photography, and considerable research was carried out in attempts to produce permanent images. Perhaps the most successful of these was the carbon process. First patented by A L Poitevin in 1855, the process utilised the fact that gelatin mixed with an alkaline bichromate becomes insoluble when exposed to light. When printing from a negative, those parts of the image representing shadow tones were hardened by the exposure to light, while light areas, protected from exposure, remained unhardened and could be subsequently washed away. Carbon and other pigments could be used as colouring agents to obtain an almost unlimited range of tones in the final image. Because the process does not employ compounds derived from silver, the resulting image is less likely to fade and was widely used in book illustration in the 1870s and 1880s.`,
+          questions: [
+            {
+              id: 1,
+              type: "fill",
+              question: "daguerreotype: images were very __________. ",
+              answer: "SHARP",
+            },
+            {
+              id: 2,
+              type: "fill",
+              question: "daguerreotype: each image was __________. ",
+              answer: "UNIQUE",
+            },
+            {
+              id: 3,
+              type: "fill",
+              question: "cyanotype: was comparatively __________ to use.",
+              answer: "SIMPLE",
+            },
+            {
+              id: 4,
+              type: "fill",
+              question:
+                "calotype: first process which created an image called __________, from which unlimited copies could be made.",
+              answer: "NEGATIVE",
+            },
+            {
+              id: 5,
+              type: "fill",
+              question:
+                "wet collodion process: needed considerable __________ to use.",
+              answer: "SKILL",
+            },
+            {
+              id: 6,
+              type: "fill",
+              question:
+                "albumen print: produced glossy images in a range of __________. ",
+              answer: "COLOURS",
+            },
+            {
+              id: 7,
+              type: "fill",
+              question:
+                "carbon process: produced permanent images because it did not use any products based on __________. ",
+              answer: "SILVER",
+            },
+            {
+              id: 8,
+              type: "tfng",
+              question:
+                "The cyanotype has proved helpful in professional fields outside that of photography.",
+              answer: "TRUE",
+            },
+            {
+              id: 9,
+              type: "tfng",
+              question:
+                "The calotype process was modified and improved upon a number of times in the years following its invention.",
+              answer: "TRUE",
+            },
+            {
+              id: 10,
+              type: "tfng",
+              question:
+                "The wet collodion process took many years to achieve success.",
+              answer: "FALSE",
+            },
+            {
+              id: 11,
+              type: "tfng",
+              question:
+                "From the mid 1850s to the 1890s, more photographers used the albumen print process than any other print medium.",
+              answer: "TRUE",
+            },
+            {
+              id: 12,
+              type: "tfng",
+              question:
+                "The inventor of the carbon process solved a long-standing problem by taking advantage of a particular feature of gelatin.",
+              answer: "TRUE",
+            },
+            {
+              id: 13,
+              type: "tfng",
+              question:
+                "The carbon process greatly increased the sales of illustrated books during the 1870s and 1890s.",
+              answer: "NOT GIVEN",
+            },
+          ],
+        },
+      };
+
+      let currentMode = null;
+      let currentPassage = null;
+      let answers = {};
+      let timeLeft = 1200;
+      let timerInterval = null;
+      let isLocked = false;
+      let showingResults = false;
+
+      function initHome() {
+        const list = document.getElementById("passagesList");
+        list.innerHTML = "";
+
+        Object.keys(passages).forEach((key) => {
+          const p = passages[key];
+          const card = document.createElement("div");
+          card.className = "passage-card";
+          card.innerHTML = `
+                    <h2 class="passage-title">${p.title}</h2>
+                    <p class="passage-info">${p.questions.length} questions • 20 minutes</p>
+                    <div class="button-group">
+                        <button class="btn btn-practice" onclick="confirmStart('${key}', 'practice')">Practice Mode</button>
+                        <button class="btn btn-exam" onclick="confirmStart('${key}', 'exam')">Real Exam Mode</button>
+                    </div>
+                `;
+          list.appendChild(card);
+        });
+      }
+
+      function confirmStart(passageKey, mode) {
+        if (mode === "practice") {
+          showModal({
+            title: "Practice Mode",
+            content:
+              'Practice Mode allows you to:<ul style="margin:0.5rem 0;"><li>Pause and review</li><li>Take your time</li><li>Learn at your own pace</li></ul>',
+            icon: "info",
+            buttons: [
+              { text: "Cancel", type: "secondary" },
+              {
+                text: "Start Practice",
+                type: "success",
+                action: () => startTest(passageKey, mode),
+              },
+            ],
+          });
+        } else {
+          showModal({
+            title: "⚠️ REAL EXAM MODE",
+            content: `<strong>Warning: This mode simulates real exam conditions</strong><ul style="margin:0.5rem 0;"><li>Screen will lock in fullscreen</li><li>Cannot minimize or exit</li><li>20-minute timer (auto-submit)</li><li>No pausing allowed</li></ul><p style="margin-top:1rem;"><strong>Are you ready to begin?</strong></p>`,
+            icon: "warning",
+            buttons: [
+              { text: "Cancel", type: "secondary" },
+              {
+                text: "Start Exam",
+                type: "danger",
+                action: () => startTest(passageKey, mode),
+              },
+            ],
+          });
+        }
+      }
+
+      function startTest(passageKey, mode) {
+        currentPassage = passageKey;
+        currentMode = mode;
+        answers = {};
+        timeLeft = 1200;
+        showingResults = false;
+
+        const passage = passages[passageKey];
+
+        document.getElementById("homeScreen").classList.add("hidden");
+        document.getElementById("testScreen").classList.remove("hidden");
+        document.getElementById("headerTitle").textContent = passage.title;
+        document.getElementById("headerMode").textContent =
+          mode === "exam" ? "EXAM MODE" : "Practice Mode";
+        document.getElementById("resultsCard").classList.add("hidden");
+
+        const header = document.getElementById("testHeader");
+        if (mode === "exam") {
+          header.classList.add("exam-mode");
+          isLocked = true;
+          document.getElementById("lockdownWarning").classList.remove("hidden");
+
+          try {
+            if (document.documentElement.requestFullscreen) {
+              document.documentElement.requestFullscreen();
+            } else if (document.documentElement.webkitRequestFullscreen) {
+              document.documentElement.webkitRequestFullscreen();
+            }
+          } catch (e) {
+            console.log("Fullscreen not supported");
+          }
+        } else {
+          header.classList.remove("exam-mode");
+          document.getElementById("lockdownWarning").classList.add("hidden");
+        }
+
+        const passageText = document.getElementById("passageText");
+        passageText.innerHTML = "";
+        passage.text.split("\n\n").forEach((para) => {
+          const p = document.createElement("p");
+          p.textContent = para;
+          passageText.appendChild(p);
+        });
+
+        renderQuestions();
+        startTimer();
+      }
+
+      function renderQuestions() {
+        const container = document.getElementById("questionsContainer");
+        container.innerHTML = "";
+        const passage = passages[currentPassage];
+
+        passage.questions.forEach((q) => {
+          const div = document.createElement("div");
+          div.className = "question";
+
+          let inputHtml = "";
+
+          if (q.type === "mcq") {
+            inputHtml = '<div class="mcq-options">';
+            q.options.forEach((opt, idx) => {
+              const letter = String.fromCharCode(65 + idx);
+              inputHtml += `
+                            <label class="mcq-option" data-qid="${
+                              q.id
+                            }" data-value="${letter}">
+                                <input type="radio" name="q${
+                                  q.id
+                                }" value="${letter}" ${
+                answers[q.id] === letter ? "checked" : ""
+              }>
+                                <span>${letter}. ${opt}</span>
+                            </label>
+                        `;
+            });
+            inputHtml += "</div>";
+          } else if (q.type === "tfng") {
+            inputHtml = '<div class="btn-options">';
+            ["TRUE", "FALSE", "NOT GIVEN"].forEach((opt) => {
+              inputHtml += `<button class="btn-option ${
+                answers[q.id] === opt ? "selected" : ""
+              }" data-qid="${q.id}" data-value="${opt}">${opt}</button>`;
+            });
+            inputHtml += "</div>";
+          } else if (q.type === "yesno") {
+            inputHtml = '<div class="btn-options">';
+            ["YES", "NO", "NOT GIVEN"].forEach((opt) => {
+              inputHtml += `<button class="btn-option ${
+                answers[q.id] === opt ? "selected" : ""
+              }" data-qid="${q.id}" data-value="${opt}">${opt}</button>`;
+            });
+            inputHtml += "</div>";
+          } else {
+            inputHtml = `<input type="text" class="question-input" data-qid="${
+              q.id
+            }" value="${
+              answers[q.id] || ""
+            }" placeholder="Type your answer...">`;
+          }
+
+          div.innerHTML = `
+                    <div class="question-header">
+                        <span class="question-number">${q.id}.</span>
+                        <div style="flex: 1;">
+                            <p class="question-text">${q.question}</p>
+                            ${inputHtml}
+                            <div class="feedback-container" data-qid="${q.id}"></div>
+                        </div>
+                    </div>
+                `;
+
+          container.appendChild(div);
+        });
+
+        container.querySelectorAll(".question-input").forEach((input) => {
+          input.addEventListener("input", (e) => {
+            const qid = parseInt(e.target.dataset.qid);
+            answers[qid] = e.target.value;
+          });
+        });
+
+        container.querySelectorAll(".btn-option").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            if (showingResults) return;
+            const qid = parseInt(e.target.dataset.qid);
+            const value = e.target.dataset.value;
+            answers[qid] = value;
+
+            document.querySelectorAll(`[data-qid="${qid}"]`).forEach((b) => {
+              b.classList.remove("selected");
+            });
+            e.target.classList.add("selected");
+          });
+        });
+
+        container.querySelectorAll(".mcq-option").forEach((label) => {
+          label.addEventListener("click", (e) => {
+            if (showingResults) return;
+            const qid = parseInt(label.dataset.qid);
+            const value = label.dataset.value;
+            answers[qid] = value;
+
+            document
+              .querySelectorAll(`.mcq-option[data-qid="${qid}"]`)
+              .forEach((l) => {
+                l.classList.remove("selected");
+              });
+            label.classList.add("selected");
+          });
+        });
+      }
+
+      function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+
+        timerInterval = setInterval(() => {
+          timeLeft--;
+          updateTimerDisplay();
+
+          if (timeLeft <= 0) {
+            finishTest();
+          }
+        }, 1000);
+      }
+
+      function updateTimerDisplay() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById("timer").textContent = `${mins}:${secs
+          .toString()
+          .padStart(2, "0")}`;
+      }
+
+      function normalizeAnswer(ans) {
+        return ans.toUpperCase().trim().replace(/\s+/g, " ");
+      }
+
+      function checkAnswer(question, userAns) {
+        if (!userAns) return false;
+
+        const normalized = normalizeAnswer(userAns);
+        const correct = normalizeAnswer(question.answer);
+
+        if (question.type === "fill") {
+          return (
+            normalized === correct ||
+            normalized === correct.replace(/\s+/g, "") ||
+            (correct.includes(normalized) && normalized.length > 3)
+          );
+        }
+
+        return normalized === correct;
+      }
+
+      function calculateScore() {
+        const passage = passages[currentPassage];
+        let correct = 0;
+
+        passage.questions.forEach((q) => {
+          if (checkAnswer(q, answers[q.id])) {
+            correct++;
+          }
+        });
+
+        return { correct, total: passage.questions.length };
+      }
+
+      function finishTest() {
+        if (timerInterval) clearInterval(timerInterval);
+        showingResults = true;
+
+        const score = calculateScore();
+        const percentage = Math.round((score.correct / score.total) * 100);
+        let band = "4";
+        if (score.correct >= 11) band = "8-9";
+        else if (score.correct >= 9) band = "7";
+        else if (score.correct >= 7) band = "6";
+        else if (score.correct >= 5) band = "5";
+
+        const resultsCard = document.getElementById("resultsCard");
+        resultsCard.innerHTML = `
+                <h3 class="results-title">Test Results</h3>
+                <div class="results-score">
+                    <div class="score-number">${score.correct}/${score.total}</div>
+                    <div>
+                        <p class="score-details">Score: ${percentage}%</p>
+                        <p style="font-size: 0.875rem; color: #6b7280;">Band estimate: ${band}</p>
+                    </div>
+                </div>
+                <button class="btn-home" onclick="returnHome()">Return Home</button>
+            `;
+        resultsCard.classList.remove("hidden");
+
+        document.getElementById("finishBtn").classList.add("hidden");
+
+        const passage = passages[currentPassage];
+        passage.questions.forEach((q) => {
+          const userAns = answers[q.id] || "";
+          const isCorrect = checkAnswer(q, userAns);
+          const feedbackContainer = document.querySelector(
+            `.feedback-container[data-qid="${q.id}"]`
+          );
+
+          if (feedbackContainer) {
+            const feedbackHtml = isCorrect
+              ? `<div class="feedback correct">
+                            <svg class="feedback-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span style="font-weight: 600;">Correct</span>
+                        </div>`
+              : `<div class="feedback incorrect">
+                            <svg class="feedback-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div>
+                                <div style="font-weight: 600;">Incorrect</div>
+                                <div class="correct-answer-text"><strong>Correct answer:</strong> ${q.answer}</div>
+                            </div>
+                        </div>`;
+            feedbackContainer.innerHTML = feedbackHtml;
+          }
+
+          const input = document.querySelector(
+            `.question-input[data-qid="${q.id}"]`
+          );
+          if (input) {
+            input.classList.add(isCorrect ? "correct" : "incorrect");
+            input.disabled = true;
+          }
+
+          document
+            .querySelectorAll(`.btn-option[data-qid="${q.id}"]`)
+            .forEach((btn) => {
+              btn.disabled = true;
+              if (btn.dataset.value === q.answer) {
+                btn.classList.add("correct-answer");
+              }
+              if (btn.dataset.value === userAns && !isCorrect) {
+                btn.classList.add("wrong-answer");
+              }
+            });
+
+          document
+            .querySelectorAll(`.mcq-option[data-qid="${q.id}"]`)
+            .forEach((label) => {
+              const radio = label.querySelector("input");
+              radio.disabled = true;
+              if (label.dataset.value === q.answer) {
+                label.classList.add("correct-answer");
+              }
+              if (label.dataset.value === userAns && !isCorrect) {
+                label.classList.add("wrong-answer");
+              }
+            });
+        });
+
+        if (currentMode === "exam") {
+          exitLockdown();
+        }
+      }
+
+      function exitLockdown() {
+        isLocked = false;
+        document.getElementById("lockdownWarning").classList.add("hidden");
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+      }
+
+      function returnHome() {
+        if (timerInterval) clearInterval(timerInterval);
+        exitLockdown();
+        document.getElementById("testScreen").classList.add("hidden");
+        document.getElementById("homeScreen").classList.remove("hidden");
+        document.getElementById("finishBtn").classList.remove("hidden");
+        answers = {};
+        showingResults = false;
+      }
+
+      document.getElementById("finishBtn").addEventListener("click", () => {
+        showModal({
+          title: "Finish Test",
+          content:
+            "Are you sure you want to submit your answers and finish the test?",
+          icon: "warning",
+          buttons: [
+            { text: "Cancel", type: "secondary" },
+            { text: "Finish Test", type: "primary", action: finishTest },
+          ],
+        });
+      });
+
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement && isLocked && !showingResults) {
+          showModal({
+            title: "⚠️ EXAM MODE",
+            content: "Please remain in fullscreen mode during the exam.",
+            icon: "warning",
+            buttons: [
+              {
+                text: "Return to Fullscreen",
+                type: "danger",
+                action: () => {
+                  try {
+                    document.documentElement.requestFullscreen();
+                  } catch (e) {}
+                },
+              },
+            ],
+          });
+        }
+      });
+
+      initHome();
+    </script>
+  </body>
+</html>

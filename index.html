@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IELTS Reading Test</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Home Screen */
+    .home-screen {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      padding: 2.5rem;
+      max-width: 900px;
+      margin: 2rem auto;
+    }
+
+    .home-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .home-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      color: #4f46e5;
+    }
+
+    .home-title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .home-subtitle {
+      color: #6b7280;
+      font-size: 1.1rem;
+    }
+
+    .passage-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.3s;
+    }
+
+    .passage-card:hover {
+      border-color: #a78bfa;
+    }
+
+    .passage-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 0.75rem;
+    }
+
+    .passage-info {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 150px;
+      padding: 0.875rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-practice {
+      background: #22c55e;
+      color: white;
+    }
+
+    .btn-practice:hover {
+      background: #16a34a;
+    }
+
+    .btn-exam {
+      background: #ef4444;
+      color: white;
+    }
+
+    .btn-exam:hover {
+      background: #dc2626;
+    }
+
+    /* Test Screen */
+    .test-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #4f46e5;
+      color: white;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 1rem;
+    }
+
+    .test-header.exam-mode {
+      background: #dc2626;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .header-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+
+    .header-mode {
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .timer {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    .timer-text {
+      font-family: monospace;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .btn-finish {
+      background: white;
+      color: #4f46e5;
+      padding: 0.5rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-finish:hover {
+      background: #f3f4f6;
+    }
+
+    .exam-mode .btn-finish {
+      color: #dc2626;
+    }
+
+    .test-content {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    @media (min-width: 1024px) {
+      .test-content {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .passage-box {
+        position: sticky;
+        top: 120px;
+        height: fit-content;
+      }
+    }
+
+    .passage-box,
+    .questions-box {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
+    }
+
+    .box-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .passage-text {
+      max-height: 600px;
+      overflow-y: auto;
+      line-height: 1.8;
+      color: #374151;
+    }
+
+    .passage-text p {
+      margin-bottom: 1rem;
+    }
+
+    .question {
+      border-left: 4px solid #c7d2fe;
+      padding-left: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .question-number {
+      font-weight: bold;
+      color: #4f46e5;
+      margin-bottom: 0.5rem;
+    }
+
+    .question-text {
+      color: #1f2937;
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+    }
+
+    .question-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    .question-input:focus {
+      outline: none;
+      border-color: #4f46e5;
+    }
+
+    .question-input:disabled {
+      background: #f9fafb;
+    }
+
+    .question-input.correct {
+      border-color: #22c55e;
+      background: #f0fdf4;
+    }
+
+    .question-input.incorrect {
+      border-color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .btn-options {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-option {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: #e5e7eb;
+      color: #374151;
+      transition: all 0.3s;
+    }
+
+    .btn-option:hover {
+      background: #d1d5db;
+    }
+
+    .btn-option.selected {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .btn-option.correct-answer {
+      box-shadow: 0 0 0 3px #22c55e;
+      background: #22c55e !important;
+      color: white !important;
+    }
+
+    .btn-option.wrong-answer {
+      box-shadow: 0 0 0 3px #ef4444;
+      background: #ef4444 !important;
+      color: white !important;
+    }
+
+    .btn-option:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .feedback {
+      margin-top: 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .feedback.correct {
+      color: #22c55e;
+    }
+
+    .feedback.incorrect {
+      color: #ef4444;
+    }
+
+    .correct-answer-text {
+      font-size: 0.875rem;
+      color: #374151;
+      margin-top: 0.25rem;
+    }
+
+    .results-card {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      grid-column: 1 / -1;
+    }
+
+    .results-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 1rem;
+    }
+
+    .results-score {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .score-number {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #4f46e5;
+    }
+
+    .score-details {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .btn-home {
+      background: #4f46e5;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .btn-home:hover {
+      background: #4338ca;
+    }
+
+    .lockdown-warning {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: #dc2626;
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      font-weight: 600;
+      z-index: 100;
+    }
+
+    @media (max-width: 768px) {
+      .home-screen {
+        padding: 1.5rem;
+      }
+
+      .home-title {
+        font-size: 1.75rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .header-content {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .header-controls {
+        justify-content: space-between;
+      }
+
+      .test-content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+  </style>
+</head>
+<body>
+  <div id="homeScreen" class="container">
+    <div class="home-screen">
+      <div class="home-header">
+        <svg class="home-icon" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        <h1 class="home-title">IELTS Reading Test</h1>
+        <p class="home-subtitle">Select a passage and mode to begin</p>
+      </div>
+      <div id="passagesList"></div>
+    </div>
+  </div>
+
+  <div id="testScreen" class="hidden">
+    <div id="testHeader" class="test-header">
+      <div class="header-content">
+        <div class="header-info">
+          <svg viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          <div>
+            <div class="header-title" id="headerTitle"></div>
+            <div class="header-mode" id="headerMode"></div>
+          </div>
+        </div>
+        <div class="header-controls">
+          <div class="timer">
+            <svg viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="timer-text" id="timer">20:00</span>
+          </div>
+          <button id="finishBtn" class="btn-finish">Finish</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container test-content">
+      <div id="resultsCard" class="results-card hidden"></div>
+      <div class="passage-box">
+        <h3 class="box-title">Reading Passage</h3>
+        <div class="passage-text" id="passageText"></div>
+      </div>
+      <div class="questions-box">
+        <h3 class="box-title">Questions</h3>
+        <div id="questionsContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="lockdownWarning" class="lockdown-warning hidden">
+    <svg viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+    </svg>
+    <span>EXAM MODE - Screen Locked</span>
+  </div>
+
+  <script>
+    const passages = {
+      zheng_he: {
+        title: "The Seven Voyages of Admiral Zheng He",
+        text: `Admiral Zheng He, who was born around 1371 and died in 1433, was perhaps the most famous Chinese explorer of all time. Between 1405 and 1433, he was sent by the Ming dynasty emperor, Yongle, on a series of seven missions to increase trade and open diplomatic relations with other nations.
+
+In 1403, Yongle decided to begin the construction of a massive fleet of ships, including 62 'treasure ships', which were the largest vessels in the world at that time.
+
+The ships were loaded with a wide range of luxury goods, notably objects made of gold and silver, as well as tea, porcelain and fine textiles.
+
+The first three voyages, which took place between 1405 and 1411, followed trade routes that were already well-established. Zheng's most important task was to lead a delegation to the local ruler, to whom he presented letters from the Chinese emperor making it clear that China had only peaceful intentions.
+
+Zheng He's fourth voyage, between 1413 and 1415, proved to be the most important yet. Zheng visited India again, then crossed the Arabian Sea to the island of Hormuz in the Persian Gulf, where no Chinese ship had ever landed before.
+
+On the fifth and sixth voyages, between 1417 and 1422, Zheng went even further, calling at several major ports on the coast of Africa. From here Zheng brought back spices that were unfamiliar to the Chinese. When Zheng returned from his sixth voyage in 1422, he found that the emperor Yongle had suspended all further voyages. This was partly due to concerns about the cost.
+
+Zheng was sent on one last voyage in 1431, though the fleet did not venture any further than India. Historians believe that Zheng died during this trip, probably in 1433.
+
+Zheng's voyages expanded China's political influence in neighbouring regions of Asia. His travels did not bring immediate success in terms of expanding trade with Asia and beyond, but the exotic goods and the knowledge he brought back home created a greater curiosity about foreign customs. The Chinese also gained an understanding of just how prosperous several neighbouring countries were, and the extent of their wealth. This greatly increased emigration by the Chinese to Southeast Asia.`,
+        questions: [
+          {id: 1, type: "tfng", text: "The aim of Zheng's voyages was to develop new commercial and political contacts with other countries.", answer: "TRUE"},
+          {id: 2, type: "tfng", text: "Historians agree on the size of the treasure ships used in Zheng's voyages.", answer: "FALSE"},
+          {id: 3, type: "tfng", text: "The goods on Zheng's ships were of higher quality than anything produced in the countries which he visited.", answer: "NOT GIVEN"},
+          {id: 4, type: "tfng", text: "Zheng's priority when he arrived in each country was to deliver a message from the Chinese emperor.", answer: "TRUE"},
+          {id: 5, type: "tfng", text: "Zheng gave his ships extra protection after an attempt was made to steal goods from them in Sri Lanka.", answer: "NOT GIVEN"},
+          {id: 6, type: "tfng", text: "Zheng's fleet was the first one from China to reach Hormuz.", answer: "TRUE"},
+          {id: 7, type: "tfng", text: "Zheng had to ask for the emperor's permission to continue the voyage along the Red Sea to Jeddah.", answer: "NOT GIVEN"},
+          {id: 8, type: "tfng", text: "Zheng generally avoided bringing animals back to China.", answer: "FALSE"},
+          {id: 9, type: "fill", text: "On fifth and sixth voyages, new _________ were introduced to China.", answer: "SPICES"},
+          {id: 10, type: "fill", text: "After 1422, Emperor Yongle cancelled trips because of their _________.", answer: "COST"},
+          {id: 11, type: "fill", text: "Final voyage: Zheng didn't sail beyond _________.", answer: "INDIA"},
+          {id: 12, type: "fill", text: "Initial failure to increase _________ with other countries.", answer: "TRADE"},
+          {id: 13, type: "fill", text: "Realisation that some nations had great _________.", answer: "WEALTH"}
+        ]
+      },
+      photographic: {
+        title: "Early Photographic Processes",
+        text: `The decades following photography's experimental beginnings in the 1820s and the public availability of a practical photographic process from 1839 were characterized by the introduction of a wide number of photographic processes.
+
+Announced in Paris in 1839, the daguerreotype was the first publicly available photographic process. The daguerreotype image was created on a silvered metal plate exposed to iodine fumes. The daguerreotype produced remarkably sharp pictures, but unlike competing processes, each daguerreotype was unique.
+
+The cyanotype or blueprint was invented by Sir John Herschel in 1840. As a relatively simple process to prepare and manipulate it was popular among amateurs throughout the nineteenth century.
+
+William Henry Fox Talbot's calotype process, the first practical negative-positive photographic process, was patented by him in 1841. This produced an image in reverse, known as a negative, which was then developed. This concept of photography, allowing the production of an unlimited number of prints from a single image, has formed the basis of photographic practice until recently.
+
+Frederick Scott Archer's wet collodion process became the standard photographic process for both amateurs and professionals from the mid-1850s until the early 1880s. Known as a wet process, it required significant skill to manipulate, but produced a negative of unsurpassed sharpness and a broad tonal range.
+
+The albumen print was the most widespread print medium in use between the mid-1850s and the 1890s. The albumen print was generally distinguishable by the glossy sheen. The fixed print could then be toned to create a wide variety of colours, ranging from purple-black to a rich chocolate brown.
+
+Perhaps the most successful permanent image process was the carbon process. First patented by A L Poitevin in 1855. Because the process does not employ compounds derived from silver, the resulting image is less likely to fade.`,
+        questions: [
+          {id: 1, type: "fill", text: "Daguerreotype: images were very __________.", answer: "SHARP"},
+          {id: 2, type: "fill", text: "Daguerreotype: each image was __________.", answer: "UNIQUE"},
+          {id: 3, type: "fill", text: "Cyanotype: was comparatively __________ to use.", answer: "SIMPLE"},
+          {id: 4, type: "fill", text: "Calotype: first process which created an image called __________, from which unlimited copies could be made.", answer: "NEGATIVE"},
+          {id: 5, type: "fill", text: "Wet collodion: needed considerable __________ to use.", answer: "SKILL"},
+          {id: 6, type: "fill", text: "Albumen print: produced glossy images in a range of __________.", answer: "COLOURS"},
+          {id: 7, type: "fill", text: "Carbon process: produced permanent images because it did not use any products based on __________.", answer: "SILVER"},
+          {id: 8, type: "tfng", text: "The cyanotype has proved helpful in professional fields outside that of photography.", answer: "TRUE"},
+          {id: 9, type: "tfng", text: "The calotype process was modified and improved upon a number of times in the years following its invention.", answer: "TRUE"},
+          {id: 10, type: "tfng", text: "The wet collodion process took many years to achieve success.", answer: "FALSE"},
+          {id: 11, type: "tfng", text: "From the mid 1850s to the 1890s, more photographers used the albumen print process than any other print medium.", answer: "TRUE"},
+          {id: 12, type: "tfng", text: "The inventor of the carbon process solved a long-standing problem by taking advantage of a particular feature of gelatin.", answer: "TRUE"},
+          {id: 13, type: "tfng", text: "The carbon process greatly increased the sales of illustrated books during the 1870s and 1890s.", answer: "NOT GIVEN"}
+        ]
+      },
+      ice_cream: {
+        title: "The History of Ice Cream",
+        text: `People the world over love ice cream. But they seldom consider how the frozen dessert came into being. Ice cold desserts, called 'ices', were around as far back as the 5th century BC, when the ancient Greeks refreshed themselves with snow, flavoured with honey or fruits.
+
+Ice houses were in regular use in ancient Rome. Usually constructed of stone, underground and insulated with straw, these were sufficiently cold to preserve ice cut from frozen lakes and rivers in winter.
+
+During the Tang Dynasty (AD 616–907), the Chinese made a cold, creamy concoction of buffalo milk, flour, camphor and snow. The solution to freezing milk was salt. When salt is added to snow or ice, energy is absorbed from a container of milk.
+
+For many years, historians assumed that it was the aristocracy that were the main consumers of these early ice creams. But in 18th-century Naples in Italy, people much lower down the social scale could make, sell and enjoy ice cream. There were vendors who sold it along the public roads.
+
+In 1843, an American called Nancy Johnson designed a hand-turned freezer, which allowed her to make silky smooth ice cream. Before this, ice cream had an unpleasant texture.
+
+In 1926 another American, Clarence Vogt, improved on Johnson's idea with his continuous freezer, which made it possible to produce ice cream on an industrial scale. This pushed the price down, making ice cream available to everyone everywhere.`,
+        questions: [
+          {id: 1, type: "tfng", text: "The majority of ancient Greeks followed the advice of Hippocrates about cold foods.", answer: "FALSE"},
+          {id: 2, type: "tfng", text: "Seneca had different reactions to Nero's various uses of snow.", answer: "TRUE"},
+          {id: 3, type: "tfng", text: "Many ancient Romans went to the mountains in the summer to eat ice cream.", answer: "NOT GIVEN"},
+          {id: 4, type: "tfng", text: "The cold storage houses in Rome were generally built of frozen blocks of ice.", answer: "FALSE"},
+          {id: 5, type: "tfng", text: "The buying and selling of snow and ice became a common international activity during Roman times.", answer: "TRUE"},
+          {id: 6, type: "tfng", text: "Tang Dynasty Chinese preferred chilled desserts made from milk to those made only of snow and ice.", answer: "NOT GIVEN"},
+          {id: 7, type: "tfng", text: "The freezing temperature of most types of milk made it easy to create frozen dairy desserts.", answer: "FALSE"},
+          {id: 8, type: "tfng", text: "Salt was commonly used as a flavouring in ice creams in the past.", answer: "NOT GIVEN"},
+          {id: 9, type: "fill", text: "It was once widely thought that ice cream was mostly eaten by the __________.", answer: "ARISTOCRACY"},
+          {id: 10, type: "fill", text: "Ice cream desserts were served at an important __________ for an American president.", answer: "BALL"},
+          {id: 11, type: "fill", text: "__________ of ice cream could be seen on the streets (Naples).", answer: "VENDORS"},
+          {id: 12, type: "fill", text: "Before 1843, ice cream had an unpleasant __________.", answer: "TEXTURE"},
+          {id: 13, type: "fill", text: "20th-century production methods allowed a reduction in the __________ of commercially sold ice cream.", answer: "PRICE"}
+        ]
+      },
+      media_literacy: {
+        title: "The Media Literacy of Children: A Review of Research Literature",
+        text: `This document provides a review of the academic literature relating to children's media literacy. It focuses primarily on television, radio, the internet and mobile telephony, and specifically addresses the various barriers to, and enablers of media literacy in the UK. The document begins by exploring the development of the three dimensions contained in Ofcom's definition of media literacy: 'the ability to access, understand and create communications in a variety of contexts'.
+
+In terms of access, the literature suggests that most children, even at quite a young age, already possess the competencies needed to gain access to media content: they are quite skilled at using the available technologies and are also able to use the associated software. As they become older, they become more aware of regulatory mechanisms, and take these into account in seeking to make their own decisions. The large majority of children show some awareness of risks relating to giving personal information, such as contact details, on the internet, although they are less aware of financial dangers such as those relating to credit card use or communication of banking details.
+
+In terms of understanding, most of the research literature relates to the development of children's understanding of television, rather than of other media such as the internet. This literature suggests that children's awareness of areas such as the difference between representation and reality, and the persuasive role of advertising, develops both as a function of their increasing knowledge of the world, and as a result of their broader cognitive development.
+
+By contrast, when it comes to creativity, there has been less academic research relating to the 'older' media such as video and analogue radio than to the new media. Research here suggests that there is considerable potential for media to be used as a means of self-expression, not least by socially disadvantaged groups; that creative involvement in media production (particularly in the context of education) can make an important contribution to the development of critical understanding.
+
+Among the barriers to media literacy are several inter-related factors, of which social class and economic status are the most well-established. In the UK, these barriers limit children's access to the internet, although not to established media such as radio or television. Less is known about other potential barriers such as disability, or about the role of individual dispositions or motivations.`,
+        questions: [
+          {id: 1, type: "fill", text: "a. having 1 __________ to communications", answer: "ACCESS"},
+          {id: 2, type: "fill", text: "many children do not recognise the 2 __________ risks related to internet use", answer: "FINANCIAL"},
+          {id: 3, type: "fill", text: "Most research has been done on children and 3 __________, and not on alternative forms of communication.", answer: "TELEVISION"},
+          {id: 4, type: "fill", text: "children's awareness grows with their knowledge of the world and their 4 __________", answer: "COGNITIVE DEVELOPMENT"},
+          {id: 5, type: "fill", text: "children can use media literacy to make 5 __________ and to cope with negative responses", answer: "CRITICAL JUDGMENTS"},
+          {id: 6, type: "fill", text: "Most research has focused on the 6 __________, indicating their use for:", answer: "NEW MEDIA"},
+          {id: 7, type: "fill", text: "different types of 7 __________", answer: "INTERACTION"},
+          {id: 8, type: "tfng", text: "When studying barriers to media literacy, considerable research has been done on the effects of disability.", answer: "FALSE"},
+          {id: 9, type: "tfng", text: "The amount of support given by parents may affect the quality of a child's media use.", answer: "TRUE"},
+          {id: 10, type: "tfng", text: "Most children are skilled at using media technologies even when very young.", answer: "TRUE"},
+          {id: 11, type: "tfng", text: "Children's understanding of advertising develops with age and experience.", answer: "TRUE"},
+          {id: 12, type: "tfng", text: "Creative media production can help develop critical understanding.", answer: "TRUE"},
+          {id: 13, type: "tfng", text: "Social class and economic status affect access to television and radio.", answer: "FALSE"}
+        ]
+      },
+      great_leap_forward: {
+        title: "A great leap forward",
+        text: `If research proves that New Zealand’s Maud Island frogs can coexist with mice, their future will be a lot brighter, say those who are trying to save the rare species from extinction.
+
+New Zealand’s native frogs are among the most primitive on the planet – virtually unchanged since the late Jurassic period, 140–160 million years ago. Back then, New Zealand was part of the seabed and all the continents as we know them today were joined together as one land mass. However, New Zealand came to the surface just in time to provide a lifeboat for the prehistoric frogs to avoid the fate of the relatives they left behind. In other words, New Zealand’s native frogs did not disappear due to environmental conditions they could not survive. New Zealand’s primal forest floor was once crawling with them and tens of thousands of their bones, from at least seven different species, have been found all over the country.
+
+Today, in the moonless dark of a forest night, Kerri Lukis, a post-graduate researcher from Victoria University, shines her torch into the undergrowth and quickly reaches towards a mouldy brown leaf. When she opens her hand, I see that this ‘leaf’ – perhaps 40 millimetres long – has tiny, almost bird-like feet, a pair of onyx-black eyes and appears to have been sprinkled with glitter. These are not the kind of frogs that most New Zealanders have seen in their gardens. The glossy lime-green frogs that can be heard croaking to one another from farm ponds and rivers are in fact Australian imports; New Zealand native frogs are a very different creature. To begin with, people will certainly not hear one. They are silent, and consequently, in the evolutionary process, they have lost their eardrums as well, therefore making it easier for researchers like Lukis to trap them. Another behaviour that is unusual for frogs is that the Maud Island species avoid water, so their tiny feet have no webs between their toes, which would normally make swimming and movement in the water more effective.
+
+Since a tadpole cannot move or survive on dry land, this stage is absent in Maud Island frogs and they go straight from gelatinous eggs (incubated by the males) to ‘froglets’, which spend their first few weeks of life as passengers on the back of a male. Before the first humans arrived, the frogs’ enemies were predators that hunted by sight – native birds such as weka, morepork and perhaps pukeko – so they developed a simple but effective defence: they kept very still. Unfortunately, freezing proved a pitifully inadequate defence against the keen-nosed pests that humans brought here. Rats, mice, and other four-legged enemies such as stoats and weasels all but wiped out the frogs.
+
+Maud Island frogs or pakeka, one of just four surviving species of native New Zealand frog, once lived throughout New Zealand, but for the past 150 years have been confined to predator-free Maud Island, 900 metres from the rocky coast of the Marlborough Sounds. In 1997, however, the Department of Conservation moved 300 to Motuara Island, then another 100 to Long Island in 2005. Early this year the frogs were finally returned to the mainland, when 30 were brought back to the Karori Wildlife Sanctuary, just a short ride from the central business district in the capital city of Wellington.
+
+The sanctuary is protected by a high-tech fence designed to keep rare native species in and hordes of introduced predators out – and mostly it does. But nobody counted on the dexterity – or determination – of baby mice, which, it turns out, can squeeze through a six-millimetre gap. Kerri Lukis is turning that setback into a golden opportunity: ‘It’s given us a chance to look at how mice impact on native frogs. There’s very little known about their effects on New Zealand wildlife,’ she says, but Karori Sanctuary – one of just a few protected places in the country where mice are the only introduced predators – provides the perfect study area.
+
+A goal of frog conservation is to establish new populations as insurance against catastrophe: predators finally managing the swim to Maud Island, or fire raging through their forest stronghold. If Lukis can prove that the frogs can cope with mice, it would make more islands available to wildlife managers looking for extra homes for them. Lukis aims to answer some long-pondered questions: Do mice impact frogs directly through predation? If so, do they attack the adults, the juveniles or the eggs? Are males more vulnerable because they sit on the eggs? And if the males are unable to search freely for food, does their condition become weakened so that they won't breed?
+
+Back in the forest, Lukis weighs and measures the tiny frog, notes with satisfaction that it might be carrying eggs, then takes a photo of the animal’s flank and jaw. Her shot reveals patterns and colouration unique to each frog, so that she can identify them without resorting to invasive alternatives like toe-clipping. Then it's gently returned to its special mouse-proof enclosure. There are enough tiny insects crawling about in the leaf litter to sustain 30 captive frogs, but sanctuary staff supplement the frogs’ diet with live moths. In early October, another 30 frogs were brought here from Maud Island and placed in a separate enclosure where they were tested for the lethal chytrid fungus, first found in New Zealand in two introduced Australian species, the green frog and the bell frog, in 1999. Once the scientists are sure they are free from disease and are not a danger to other frogs, the Maud Island frogs will be introduced to those already resident at Karori, then subdivided into two groups with roughly equal gender ratios. One group will go on living an isolated life in the enclosure; the other, left to see how they survive the intrusion of the sanctuary’s mice. This will hopefully give Lukis the answers she needs.`,
+        questions: [
+          {id: 14, type: "fill", text: "The Maud Island frog, roughly ________ in length", answer: "40 MILLIMETRES"},
+          {id: 15, type: "fill", text: "Most other frogs are known for the ________ noise they make as a means of communication", answer: "CROAKING"},
+          {id: 16, type: "fill", text: "As they are silent, they no longer possess ________.", answer: "EARDRUMS"},
+          {id: 17, type: "fill", text: "As they are forest-dwellers, there is no need for them to have ________ on their feet.", answer: "WEBS"},
+          {id: 18, type: "fill", text: "missing out the usual ________ stage in between.", answer: "TADPOLE"},
+          {id: 19, type: "fill", text: "The froglets are carried by the ________ of the species.", answer: "MALE"},
+          {id: 20, type: "dropdown", text: "methods scientists use to distinguish individual frogs within a species", answer: "G", options: ["A", "B", "C", "D", "E", "F", "G"]},
+          {id: 21, type: "dropdown", text: "the stages involved in the relocation of Maud Island frogs to new areas for conservation reasons", answer: "D", options: ["A", "B", "C", "D", "E", "F", "G"]},
+          {id: 22, type: "dropdown", text: "an explanation of how some ancient frogs managed to escape extinction", answer: "A", options: ["A", "B", "C", "D", "E", "F", "G"]},
+          {id: 23, type: "dropdown", text: "a comparison between different species of frogs", answer: "B", options: ["A", "B", "C", "D", "E", "F", "G"]},
+          {id: 24, type: "dropdown", text: "the range of information that research into the effects of mice on frog populations may uncover", answer: "F", options: ["A", "B", "C", "D", "E", "F", "G"]},
+          {id: 25, type: "multi", text: "Which TWO of these threats are mentioned by the writer of the passage?", options: ["A wild animals", "B the unusual climate", "C domestic animals kept by people", "D disease", "E non-native species of birds"], answer: ["A", "D"]}
+        ]
+      },
+      science_filmmaking: {
+        title: "Science and filmmaking",
+        text: `Every year the film academy in the USA celebrates the outstanding achievements of the year in a ceremony known as the Oscars. An increasingly important component of the ceremony is the presentation of the Scientific and Technical awards. In 2004 a notable event took place: the academic world met the cinematographic world when researchers from Stanford University in the USA were awarded an Oscar. These researchers, led by Steve Marschner, were from the field of Computer Graphics at Stanford. They were part of a growing cohort of computer scientists that has become fundamental to moviemaking.
+
+Films have shown that it is possible to use CGI to make actors look younger, older, weaker or stronger than they actually are in a surprisingly realistic manner. At least, it is possible if the altered actors are not filmed too closely. This is because the difficulty of recreating the textures of both skin and fabric means that the effect is less convincing when seen close up. The work of Marschner and his colleagues has greatly improved the accurate and realistic modeling of both skin and fabric. They recognized that one of the difficulties of creating lifelike characters in the computer world is that in CGI the characters’ skin is opaque whereas real skin is in fact translucent, that is to say it is semi-transparent.
+
+Marschner and his colleagues received the Oscar for their work in successfully producing a CGI model that simulates translucency; this is when light penetrates skin and then scatters below the skin’s surface before re-emerging. This is called subsurface scattering, and the mathematics for the model goes back many decades to the time when it was used in astrophysics. Because human skin is naturally translucent, it was necessary to be able to create this artificially in order to simulate the soft appearance of real skin. Previous CGI models, which assumed that skin was entirely opaque, resulted in characters with a plastic appearance. Within two years of their original research paper, all the major special-effects studios had incorporated it into their digital rendering systems.
+
+However, despite their award, the scientists, with admirable tenacity, continued their search for perfection, as they still did not feel that they had yet satisfactorily recreated the subtle ways light is reflected. To do this, they began to look in detail at the way skins and fabrics reflect light differently according to their make-up: the exact arrangement of fibers in fabric and the network of fibers in skin. Marschner and his team of friends to do this by using computerized tomography – which is most familiar as a medical technique for examining people’s internal organs. Like classical radiology it uses X-rays, but because the image is constructed inside a computer using exposures taken from many different positions, rather than a single exposure on photographic film, it can capture fine details that are invisible in classical radiography.
+
+Unfortunately, the scientists understood that at this point in time they could not use computer tomography on skin, because a very high intensity X-ray is needed to show the kind of detail they wanted and this would be very dangerous for human skin. They have, however, had some success with fabric. Using this new method of imaging, they are able to accurately record the three-dimensional structure of all the fibers in a number of small pieces of fabric. These same pieces of fabric, through the use of CGI, can then be patched together to form an entire garment inside a computer, in the same way that a small group of actors can be made to look like hundreds of people gathered together. A garment created through CGI is therefore made up of pieces of fabric whose internal structure has been pre-recorded. This means that the way light is reflected by the garment can be calculated far more realistically than if the scientists just made a computer model of what they thought the interior of the fabric looked like. Cinematography will benefit from this because, although it may take some years to be able to use computerized tomographic imaging of skin, for the moment the movement of a virtual cloak or the lifting of a computerized hat should look far more realistic.
+
+In the meantime, according to Marschner’s colleague Kavita Bala, the technology might have an application in online retailing. At the moment people buying clothes over the internet have only a standard photograph to help them choose their purchases. It is hoped that if online shoppers can view items which have been presented through the use of computerized tomography graphics, they will have a much better understanding of what the material the item is made of is really like.
+
+Marschner is now working on the way light is scattered from individual hairs. He says, ‘I feel lucky to be working in this niche. I'm a visual person and to be able to spend my time scrutinizing the world around me, trying to understand why it looks the way it does, is very rewarding’.`,
+        questions: [
+          {id: 27, type: "mcq", text: "What is the writer's main point in the first paragraph?", options: ["A. Computer scientists are rarely represented at the Oscars.", "B. Film industry awards hold little interest for computer scientists.", "C. The USA rewards film actors more than computer scientists.", "D. Computer scientists are becoming a vital part of the film industry."], answer: "D"},
+          {id: 28, type: "mcq", text: "When describing the way computer generated imagery changes actors' appearance, what does the writer suggest?", options: ["A. CGI looks best from a distance.", "B. CGI interferes with actors' facial expressions.", "C. Audiences expect too much of CGI.", "D. The scientists had hoped for more convincing results."], answer: "A"},
+          {id: 29, type: "mcq", text: "What does the writer suggest about the scientists' attitude to their work in the fourth paragraph?", options: ["A. They were motivated to get as near to reality as possible.", "B. They were interested in gaining recognition for their work.", "C. They thought it could have medical applications.", "D. They hoped to receive further funding for their research."], answer: "A"},
+          {id: 30, type: "mcq", text: "What are we told about computerised tomography?", options: ["A. It has only recently been used by doctors.", "B. It is similar to X-rays in the way it works.", "C. Filmmakers have used it for many years for special lighting effects.", "D. It can be administered using traditional radiography machines."], answer: "B"},
+          {id: 31, type: "mcq", text: "Which of these advantages does the writer attribute to the current use of computerised tomography?", options: ["A. It is most effective when used to create images of skin.", "B. It can make a few people seem like a crowd.", "C. It allows clothes designers to create new designs.", "D. It is practical because of the time it takes."], answer: "B"},
+          {id: 32, type: "mcq", text: "The writer mentions Kavita Bala in order to", options: ["A. comment on the success of CGI in commercial contexts.", "B. highlight the link between CGI and photography.", "C. show that Marschner's team are uncertain about the future of CGI.", "D. demonstrate a use for CGI outside the film industry."], answer: "D"},
+          {id: 33, type: "yng", text: "It used to be unusual for university researchers to receive a cinematography award.", answer: "YES"},
+          {id: 34, type: "yng", text: "CGI is popular among ageing actors.", answer: "NOT GIVEN"},
+          {id: 35, type: "yng", text: "The scientists' success in generating images of complete CGI garments has won them many awards.", answer: "NO"},
+          {id: 36, type: "yng", text: "It will be a long time before computerised tomographic fabric is used by filmmakers.", answer: "NO"},
+          {id: 37, type: "dropdown", text: "how ________ interacts with human skin.", options: ["A. light", "B. transparency", "C. age", "D. use", "E. astrophysics", "F. mathematics", "G. improvement", "H. colour", "I. translucency"], answer: "A"},
+          {id: 38, type: "dropdown", text: "principles of ________ , which had previously been applied in other scientific research.", options: ["A. light", "B. transparency", "C. age", "D. use", "E. astrophysics", "F. mathematics", "G. improvement", "H. colour", "I. translucency"], answer: "E"},
+          {id: 39, type: "dropdown", text: "the ________ of Marschner's model by special effects studios.", options: ["A. light", "B. transparency", "C. age", "D. use", "E. astrophysics", "F. mathematics", "G. improvement", "H. colour", "I. translucency"], answer: "D"},
+          {id: 40, type: "dropdown", text: "led to the ________ of cinematography.", options: ["A. light", "B. transparency", "C. age", "D. use", "E. astrophysics", "F. mathematics", "G. improvement", "H. colour", "I. translucency"], answer: "G"}
+        ]
+      },
+      radiocarbon_dating: {
+        title: "Radiocarbon dating - A profile of the scientist Nancy Athfield",
+        text: `Nancy Athfield is a scientist specializing in radiocarbon dating (a scientific method that can accurately determine the age of organic materials). She has just returned from a research expedition deep in the forests of Cambodia's Cardamom Mountains, where she has been working to unravel the secrets of ancient human remains discovered on a number of cliff-side ledges. The unexplained remains, discovered by local people in large ceramic jars and hollowed-out logs, have increasingly drawn Athfield away from her regular employment at G.N.S. Science's Rafter Laboratory in New Zealand and into the world of research in the field.
+
+She first learned of the Cardamom remains in 2003, when a film-making company requested that she radiocarbon date bone samples for a documentary film being made in Cambodia. The film-makers had set out to investigate the idea that these human remains marked the final resting place of people belonging to the last royal household of Angkor, which once ruled much of the surrounding area. At its height in the thirteenth century, Angkor was home to a population 30 times larger than that of Paris at the time, but in 1431 it was over-run by an invading army and the city was permanently abandoned. However, many stories were told of surviving members of the royal family fleeing to seek refuge in the Cardamom Mountains.
+
+Athfield dated the original Cardamom bone samples to as late as 1620, dashing the possibility of Angkorian royalty. However, over the years since then, other ancient human remains have emerged at different sites around the country, leaving the ultimate fate of the royal household of Angkor still uncertain. Athfield intends to return soon to Cambodia in order to continue her research at a number of these new sites.
+
+Investigating the origins of an unknown people in Asia is a long way from her birthplace in New York, but Athfield's career path has been far from conventional. She finished her secondary education early, aged just sixteen, and did a variety of badly paid jobs and community courses before a friend suggested she sit the entrance exam for university. She did, and to her surprise she was accepted. While completing her undergraduate studies in physical geography she got a job at the Lamont-Doherty Earth Observatory. It was here that she met Wally Brocker, a climate scientist and one of the pioneers of radiocarbon dating. 'From him I learned that the best place to be is where everything you know is shaken by a new piece of information. In other words, I learned to think like a scientist.'
+
+When Athfield's then husband was offered a post at G.N.S. Science, she accompanied him to New Zealand and took a job as lab manager at Rafter Laboratory. 'I realised it was a good time to get a PhD,' she says. At the time there was a great deal of controversy over radiocarbon dating, which seemed to suggest that a rat species had arrived in New Zealand as early as 100 AD, nearly 700 years before the first visitors were thought to have reached those untouched islands. Her PhD was based on five years of research exploring this issue, because she wanted to look at how scientists ascertain the reliability of radiocarbon dating and this seemed to be the perfect subject. Athfield concluded that previous radiocarbon tests had been unreliable, and this was connected to the rat's diet, not due to faulty lab procedures as had once been thought.
+
+She then began embracing broader issues related to her skills, and started working as a fully qualified archaeologist in the UK in order to contribute to a 10-year research project fine-tuning Anglo-Saxon chronology. But it was the call from those film-makers in 2003 that truly ignited her passion for fieldwork, and the unanswered questions regarding the Cardamom remains.
+
+Athfield was keen to continue her work in Cambodia after the camera crews left, but she and her colleagues were hampered by that universal problem for researchers, a lack of funding. However, after several years of fruitless applications, she made a breakthrough when the Australian Research Council supported her and a team based at the University of Sydney so that she could return to the Cardamoms, as part of a larger project to create a Cambodia-wide radiocarbon database. The project has brought together geologists, biologists, ceramic specialists, ethnographers, and even a dendroclimatologist (who determines past climates from trees), but it has been no easy task because the country doesn't have an extensive geological map. Nonetheless, with Cambodia's Ministry of Culture having learned of freshly discovered jar burial sites in the Cardamom Mountains, Athfield is more enthusiastic about the project than ever.`,
+        questions: [
+          {id: 1, type: "tfng", text: "Nancy Athfield found ancient human remains in Cambodia.", answer: "FALSE"},
+          {id: 2, type: "tfng", text: "The human remains found in the Cardamom mountains were in good condition.", answer: "NOT GIVEN"},
+          {id: 3, type: "tfng", text: "Athfield has taken time off from her usual job to do research in Cambodia.", answer: "TRUE"},
+          {id: 4, type: "tfng", text: "The Cambodian government asked Athfield to radiocarbon date the Cardamom remains.", answer: "FALSE"},
+          {id: 5, type: "tfng", text: "Film-makers were researching how Angkor was rebuilt after the 1431 invasion.", answer: "FALSE"},
+          {id: 6, type: "tfng", text: "Athfield initially doubted the stories of the royal family hiding in the Cardamom mountains.", answer: "NOT GIVEN"},
+          {id: 7, type: "tfng", text: "Athfield's research disproved the idea that the Cardamom remains were from the royal family.", answer: "TRUE"}
+        ]
+      }
+    };
+
+    // DOM elements
+    const homeScreen = document.getElementById('homeScreen');
+    const testScreen = document.getElementById('testScreen');
+    const passagesList = document.getElementById('passagesList');
+    const headerTitle = document.getElementById('headerTitle');
+    const headerMode = document.getElementById('headerMode');
+    const passageText = document.getElementById('passageText');
+    const questionsContainer = document.getElementById('questionsContainer');
+    const timerDisplay = document.getElementById('timer');
+    const finishBtn = document.getElementById('finishBtn');
+    const resultsCard = document.getElementById('resultsCard');
+    const testHeader = document.getElementById('testHeader');
+    const lockdownWarning = document.getElementById('lockdownWarning');
+
+    // State
+    let currentPassage = null;
+    let isExamMode = false;
+    let userAnswers = {};
+    let timerInterval = null;
+    let remainingSeconds = 0;
+
+    // Render home screen passages
+    function renderPassages() {
+      passagesList.innerHTML = '';
+      Object.keys(passages).forEach(key => {
+        const p = passages[key];
+        const card = document.createElement('div');
+        card.className = 'passage-card';
+        card.innerHTML = `
+          <div class="passage-title">${p.title}</div>
+          <div class="passage-info">${p.questions.length} questions • ~20 minutes</div>
+          <div class="button-group">
+            <button class="btn btn-practice" data-key="${key}" data-mode="practice">Practice Mode</button>
+            <button class="btn btn-exam" data-key="${key}" data-mode="exam">Exam Mode</button>
+          </div>
+        `;
+        passagesList.appendChild(card);
+      });
+    }
+
+    // Start test
+    function startTest(key, exam) {
+      currentPassage = passages[key];
+      isExamMode = exam;
+
+      homeScreen.classList.add('hidden');
+      testScreen.classList.remove('hidden');
+
+      headerTitle.textContent = currentPassage.title;
+      headerMode.textContent = isExamMode ? 'EXAM MODE' : 'PRACTICE MODE';
+
+      testHeader.classList.toggle('exam-mode', isExamMode);
+      lockdownWarning.classList.toggle('hidden', !isExamMode);
+
+      // Try fullscreen in exam mode
+      if (isExamMode && document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      }
+
+      // Passage text
+      passageText.innerHTML = '';
+      currentPassage.text.split('\n\n').forEach(para => {
+        if (para.trim()) {
+          const p = document.createElement('p');
+          p.textContent = para.trim();
+          passageText.appendChild(p);
+        }
+      });
+
+      renderQuestions();
+      userAnswers = {};
+      resultsCard.classList.add('hidden');
+
+      if (isExamMode) {
+        remainingSeconds = 20 * 60; // 20 minutes
+        startTimer();
+      } else {
+        stopTimer();
+        timerDisplay.textContent = 'Unlimited';
+      }
+    }
+
+    // Render questions
+    function renderQuestions() {
+      questionsContainer.innerHTML = '';
+      currentPassage.questions.forEach(q => {
+        const div = document.createElement('div');
+        div.className = 'question';
+        div.dataset.qid = q.id;
+        div.innerHTML = `
+          <div class="question-number">Question ${q.id}</div>
+          <div class="question-text">${q.text}</div>
+          <div class="feedback hidden"></div>
+        `;
+
+        let inputArea;
+
+        if (q.type === 'tfng' || q.type === 'yng' || q.type === 'mcq') {
+          const optionsArr = q.type === 'tfng' ? ['TRUE', 'FALSE', 'NOT GIVEN'] :
+                             q.type === 'yng' ? ['YES', 'NO', 'NOT GIVEN'] :
+                             q.options.map(o => o);
+          const group = document.createElement('div');
+          group.className = 'btn-options';
+          optionsArr.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-option';
+            btn.textContent = opt;
+            btn.dataset.value = q.type === 'mcq' ? String.fromCharCode(65 + idx) : opt;
+            btn.addEventListener('click', () => {
+              group.querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
+              btn.classList.add('selected');
+              userAnswers[q.id] = btn.dataset.value;
+              if (!isExamMode) checkAnswer(q.id);
+            });
+            group.appendChild(btn);
+          });
+          inputArea = group;
+        } else if (q.type === 'dropdown') {
+          const select = document.createElement('select');
+          select.className = 'question-input';
+          select.innerHTML = '<option value="">Select...</option>';
+          q.options.forEach(o => {
+            const isList = o.includes('.');
+            const value = isList ? o[0] : o;
+            const label = o;
+            const opt = document.createElement('option');
+            opt.value = value;
+            opt.textContent = label;
+            select.appendChild(opt);
+          });
+          select.addEventListener('change', () => {
+            userAnswers[q.id] = select.value;
+            if (!isExamMode && select.value) checkAnswer(q.id);
+          });
+          inputArea = select;
+        } else if (q.type === 'multi') {
+          const group = document.createElement('div');
+          group.className = 'multi-options';
+          q.options.forEach((opt, idx) => {
+            const label = document.createElement('label');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.dataset.value = String.fromCharCode(65 + idx);
+            checkbox.addEventListener('change', () => {
+              const selected = Array.from(group.querySelectorAll('input:checked')).map(cb => cb.dataset.value);
+              userAnswers[q.id] = selected;
+              if (!isExamMode) checkAnswer(q.id);
+            });
+            label.appendChild(checkbox);
+            label.append(` ${opt}`);
+            group.appendChild(label);
+            group.appendChild(document.createElement('br'));
+          });
+          inputArea = group;
+        } else { // fill
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'question-input';
+          input.addEventListener('input', () => {
+            userAnswers[q.id] = input.value.trim().toUpperCase();
+            if (!isExamMode && input.value.trim()) checkAnswer(q.id);
+          });
+          inputArea = input;
+        }
+
+        div.insertBefore(inputArea, div.querySelector('.feedback'));
+        questionsContainer.appendChild(div);
+      });
+    }
+
+    // Check and show feedback
+    function checkAnswer(qid, forceShow = false) {
+      if (!forceShow && isExamMode) return;
+
+      const questionDiv = questionsContainer.querySelector(`[data-qid="${qid}"]`);
+      const feedback = questionDiv.querySelector('.feedback');
+      const q = currentPassage.questions.find(qq => qq.id === qid);
+
+      feedback.classList.add('hidden');
+      feedback.classList.remove('correct', 'incorrect');
+      feedback.innerHTML = '';
+
+      let user = userAnswers[qid] || '';
+      let correct = q.answer;
+
+      let isCorrect = false;
+
+      if (q.type === 'multi') {
+        const userSorted = (Array.isArray(user) ? user : []).sort().join(',');
+        const correctSorted = (Array.isArray(correct) ? correct : []).sort().join(',');
+        isCorrect = userSorted === correctSorted;
+      } else if (q.type === 'fill') {
+        isCorrect = (user || '').toString().trim() === correct.toString().trim();
+      } else {
+        isCorrect = user === correct;
+      }
+
+      // Highlight correct/incorrect
+      if (q.type === 'tfng' || q.type === 'yng' || q.type === 'mcq') {
+        questionDiv.querySelectorAll('.btn-option').forEach(btn => {
+          btn.classList.remove('correct-answer', 'wrong-answer', 'selected');
+          if (btn.dataset.value === correct) btn.classList.add('correct-answer');
+          if (btn.dataset.value === user && user !== correct) btn.classList.add('wrong-answer');
+          if (btn.dataset.value === user) btn.classList.add('selected');
+        });
+      } else if (q.type === 'dropdown') {
+        const select = questionDiv.querySelector('select');
+        select.classList.remove('correct', 'incorrect');
+        if (user === correct && user) select.classList.add('correct');
+        else if (user && user !== correct) select.classList.add('incorrect');
+      } else if (q.type === 'fill') {
+        const input = questionDiv.querySelector('.question-input');
+        input.classList.remove('correct', 'incorrect');
+        if (isCorrect) input.classList.add('correct');
+        else if (user) input.classList.add('incorrect');
+      } else if (q.type === 'multi') {
+        questionDiv.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.parentElement.classList.remove('correct-answer', 'wrong-answer');
+          if (Array.isArray(correct) && correct.includes(cb.dataset.value)) {
+            cb.parentElement.classList.add('correct-answer');
+          }
+          if (Array.isArray(user) && user.includes(cb.dataset.value) && 
+              Array.isArray(correct) && !correct.includes(cb.dataset.value)) {
+            cb.parentElement.classList.add('wrong-answer');
+          }
+        });
+      }
+
+      if (forceShow || (user && (q.type !== 'fill' || user.toString().trim()))) {
+        if (isCorrect) {
+          feedback.innerHTML = '✓ Correct';
+          feedback.classList.add('correct');
+        } else {
+          feedback.innerHTML = `✗ Incorrect. Correct answer: <strong>${Array.isArray(correct) ? correct.join(', ') : correct}</strong>`;
+          feedback.classList.add('incorrect');
+        }
+        feedback.classList.remove('hidden');
+      } else if (forceShow && !user) {
+        feedback.innerHTML = `No answer. Correct: <strong>${Array.isArray(correct) ? correct.join(', ') : correct}</strong>`;
+        feedback.classList.add('incorrect');
+        feedback.classList.remove('hidden');
+      }
+    }
+
+    // Timer
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        const min = Math.floor(remainingSeconds / 60).toString().padStart(2, '0');
+        const sec = (remainingSeconds % 60).toString().padStart(2, '0');
+        timerDisplay.textContent = `${min}:${sec}`;
+
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          finishTest();
+        }
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = null;
+    }
+
+    // Finish test
+    function finishTest() {
+      stopTimer();
+
+      if (isExamMode) {
+        // Disable all inputs
+        questionsContainer.querySelectorAll('.question-input, .btn-option, input[type="checkbox"]').forEach(el => el.disabled = true);
+
+        // Show feedback for all questions
+        currentPassage.questions.forEach(q => checkAnswer(q.id, true));
+      }
+
+      calculateAndShowResults();
+    }
+
+    // Calculate and show results
+    function calculateAndShowResults() {
+      let correctCount = 0;
+      currentPassage.questions.forEach(q => {
+        let userNorm = (userAnswers[q.id] || '');
+        let correctNorm = q.answer;
+        
+        if (q.type === 'multi') {
+          const userSorted = (Array.isArray(userNorm) ? userNorm : []).sort().join(',');
+          const correctSorted = (Array.isArray(correctNorm) ? correctNorm : []).sort().join(',');
+          if (userSorted === correctSorted) correctCount++;
+        } else {
+          userNorm = userNorm.toString().toUpperCase().trim();
+          correctNorm = correctNorm.toString().toUpperCase().trim();
+          if (userNorm === correctNorm) correctCount++;
+        }
+      });
+
+      const total = currentPassage.questions.length;
+
+      resultsCard.innerHTML = `
+        <h2 class="results-title">Test Complete!</h2>
+        <div class="results-score">
+          <div class="score-number">${correctCount}/${total}</div>
+          <div class="score-details">You scored ${correctCount} out of ${total} correct</div>
+        </div>
+        <button class="btn-home" id="homeBtn">Back to Home</button>
+      `;
+      resultsCard.classList.remove('hidden');
+    }
+
+    // Event listeners
+    document.addEventListener('click', e => {
+      if (e.target.matches('[data-mode]')) {
+        const key = e.target.dataset.key;
+        const exam = e.target.dataset.mode === 'exam';
+        startTest(key, exam);
+      }
+
+      if (e.target.id === 'finishBtn') {
+        finishTest();
+      }
+
+      if (e.target.id === 'homeBtn') {
+        if (document.fullscreenElement) document.exitFullscreen();
+        testScreen.classList.add('hidden');
+        homeScreen.classList.remove('hidden');
+        testHeader.classList.remove('exam-mode');
+        lockdownWarning.classList.add('hidden');
+        stopTimer();
+      }
+    });
+
+    // Fullscreen exit warning (exam mode only)
+    document.addEventListener('fullscreenchange', () => {
+      if (isExamMode && !document.fullscreenElement) {
+        lockdownWarning.innerHTML = `
+          <svg viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span>Full screen exited – please re-enter full screen</span>
+        `;
+      } else if (isExamMode) {
+        lockdownWarning.innerHTML = `
+          <svg viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          <span>EXAM MODE - Screen Locked</span>
+        `;
+      }
+    });
+
+    // Initial render
+    renderPassages();
+  </script>
+</body>
+</html>
